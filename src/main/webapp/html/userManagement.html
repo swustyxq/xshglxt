@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<!--[if lt IE 7 ]><html lang="en" class="ie6 ielt7 ielt8 ielt9"><![endif]-->
+<!--[if IE 7 ]><html lang="en" class="ie7 ielt8 ielt9"><![endif]-->
+<!--[if IE 8 ]><html lang="en" class="ie8 ielt9"><![endif]-->
+<!--[if IE 9 ]><html lang="en" class="ie9"> <![endif]-->
+<!--[if (gt IE 9)|!(IE)]><!-->
+<html lang="en">
+<!--<![endif]-->
+<head>
+<meta charset="utf-8">
+<title>学生会物资管理系统</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link href="../css/bootstrap.min.css" rel="stylesheet">
+<link href="../css/bootstrap-responsive.min.css" rel="stylesheet">
+<link href="../css/site.css" rel="stylesheet">
+<script src="../javascript/jquery.min.js"></script>
+<!--[if lt IE 9]><script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+</head>
+<body>
+	<div class="container">
+		<div class="navbar">
+			<div class="navbar-inner">
+				<div class="container">
+					<a class="btn btn-navbar" data-toggle="collapse"
+						data-target=".nav-collapse"> <span class="icon-bar"></span> <span
+						class="icon-bar"></span> <span class="icon-bar"></span>
+					</a> <a class="brand" href="#" style="width: 80%; text-align: center;">学生会物资管理系统</a>
+					<div class="nav-collapse">
+						<ul class="nav pull-right">
+							<li><a id="username">用户名</a></li>
+							<li><a href="javascript:logout()">注销</a></li>
+						</ul>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="span2">
+				<div class="well" style="padding: 20px 0;">
+					<ul id="navigation" class="nav nav-list">
+					</ul>
+				</div>
+			</div>
+			<div class="span10">
+				<div class="hero-unit">
+					<h3>用户列表</h3>
+					<div class="btn-group">
+						<button type="button" class="btn btn-default" data-toggle="modal"
+							data-target="#addModal" onclick="initadduser()">增加用户</button>
+
+					</div>
+					<div class="pull-right form-inline">
+						<div>
+							<input type="text" data-provide="typeahead" style="width: 120px"
+								id="usersearchinput"> <select id="usersearch"
+								class="form-control" onchange="cityChange()"
+								style="width: 100px;">
+								<option>账号</option>
+								<option>用户名</option>
+								<option>用户类型</option>
+								<option>所属部门</option>
+							</select>
+							<button class="btn" onclick="javascript:searchuserbytype()">查找</button>
+						</div>
+					</div>
+
+					<table class="table">
+						<thead>
+							<tr>
+								<th>序号</th>
+								<th>账号</th>
+								<th>用户名</th>
+								<th>用户类型</th>
+								<th>所属部门</th>
+								<th>电话</th>
+								<th>地址</th>
+							</tr>
+						</thead>
+						<tbody id="users">
+						</tbody>
+					</table>
+					<div class="pagination pagination-right">
+						<nav>
+							<ul id="page" class="pagination">
+							</ul>
+						</nav>
+						<p id="pagenote"></p>
+					</div>
+
+					<!-- 增加用户对话框 -->
+					<div class="modal hide fade" style="width: 500px" id="addModal">
+						<div class="modal-header">
+							<button type="button" class="close" data-dismiss="modal"
+								aria-hidden="true">&times;</button>
+							<h3>增加用户</h3>
+						</div>
+						<div class="modal-body">
+							<p>
+							<div class="input-group">
+								<span class="input-group-addon">账号</span> <input type="text"
+									placeholder="账号" maxLength="10"
+									onkeyup="this.value=this.value.replace(/\D/g,'')"
+									onafterpaste="this.value=this.value.replace(/\D/g,'')"
+									class="form-control" id="userLoginname" placeholder="账号">
+							</div>
+							<div class="input-group">
+								<span class="input-group-addon">用户名</span> <input type="text"
+									class="form-control" id="userName" placeholder="用户名">
+							</div>
+							<div class="input-group">
+								<span class="input-group-addon">密码</span> <input type="text"
+									class="form-control" id="userPassword" placeholder="密码">
+							</div>
+							<div>
+								<span class="input-group-addon">用户类型</span> <select
+									id="userType" class="form-control">
+									<option>普通用户</option>
+									<option>物资管理员</option>
+									<option>高级管理员</option>
+								</select>
+							</div>
+							<div>
+								<span class="input-group-addon">所属部门</span> <select
+									id="userDeptname" class="form-control">
+								</select>
+							</div>
+							<div class="input-group">
+								<span class="input-group-addon">电话</span> <input type="text"
+									class="form-control" id="userTelephone" placeholder="电话">
+							</div>
+							<div class="input-group">
+								<span class="input-group-addon">地址</span> <input type="text"
+									class="form-control" id="userAddress" placeholder="地址">
+							</div>
+							</p>
+						</div>
+						<div class="modal-footer">
+							<a href="#" data-dismiss="modal" class="btn">关闭</a>
+							<button type="button" onclick="javascript:adduser()"
+								class="btn btn-primary">保存</button>
+						</div>
+					</div>
+					<!-- 对话框结束 -->
+					<!-- 修改物资信息对话框 -->
+					<div class="modal hide fade" style="width: 500px" id="updateModal">
+						<div class="modal-header">
+							<button type="button" class="close" data-dismiss="modal"
+								aria-hidden="true">&times;</button>
+							<h3>修改用户信息</h3>
+						</div>
+						<div class="modal-body">
+							<p>
+							<div class="input-group">
+								<span class="input-group-addon ">账号</span> <input type="text"
+									class="form-control " readOnly=true id="uuserLoginname">
+							</div>
+							<div class="input-group">
+								<span class="input-group-addon">用户名</span> <input type="text"
+									class="form-control" id="uuserName" placeholder="用户名">
+							</div>
+
+							<div>
+								<span class="input-group-addon">用户类型</span> <select
+									id="uuserType" class="form-control">
+									<option>普通用户</option>
+									<option>物资管理员</option>
+									<option>高级管理员</option>
+								</select>
+							</div>
+							<div>
+								<span class="input-group-addon">所属部门</span> <select
+									id="uuserDeptname" class="form-control">
+								</select>
+							</div>
+							<div class="input-group">
+								<span class="input-group-addon">电话</span> <input type="text"
+									class="form-control" id="uuserTelephone" placeholder="电话">
+							</div>
+							<div class="input-group">
+								<span class="input-group-addon">地址</span> <input type="text"
+									class="form-control" id="uuserAddress" placeholder="地址">
+							</div>
+						</div>
+						<div class="modal-footer">
+							<a href="#" data-dismiss="modal" class="btn">关闭</a>
+							<button type="button" onclick="javascript:updatauser()"
+								class="btn btn-primary">保存</button>
+						</div>
+					</div>
+					<!-- 对话框结束 -->
+					<table class="table table-bordered table-striped">
+					</table>
+				</div>
+			</div>
+
+			<!-- 页面提示窗口 -->
+			<div id="SysWindow" class="modal fade bs-example-modal-sm"
+				tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel"
+				aria-hidden="true">
+
+				<div class="modal-dialog modal-sm">
+					<div class="modal-content">
+						<div class="modal-header">
+							<button class="close" data-dismiss="modal" type="button">
+								<span aria-hidden="true">×</span>
+							</button>
+							<h4 id="mySmallModalLabel" class="modal-title">系统提示</h4>
+						</div>
+						<div class="modal-body">
+							<p id="SysHint"></p>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!-- 页面提示结束 -->
+		</div>
+	</div>
+	<script src="../javascript/jquery.min.js"></script>
+	<script src="../javascript/bootstrap.min.js"></script>
+	<script src="../javascript/site.js"></script>
+	<script src="../js/common.js"></script>
+	<script src="../js/changePSW.js"></script>
+	<script src="../js/userManage.js"></script>
+</body>
+</html>

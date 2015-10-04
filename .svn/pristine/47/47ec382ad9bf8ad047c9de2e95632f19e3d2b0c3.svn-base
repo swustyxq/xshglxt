@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="StuMtrManageSys.dao.UsertypeMapper" >
+  <resultMap id="BaseResultMap" type="StuMtrManageSys.model.Usertype" >
+    <id column="usertype_name" property="usertypeName" jdbcType="VARCHAR" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from usertype
+    where usertype_name = #{usertypeName,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="StuMtrManageSys.model.Usertype" >
+    insert into usertype (usertype_name)
+    values (#{usertypeName,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="StuMtrManageSys.model.Usertype" >
+    insert into usertype
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="usertypeName != null" >
+        usertype_name,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="usertypeName != null" >
+        #{usertypeName,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+</mapper>

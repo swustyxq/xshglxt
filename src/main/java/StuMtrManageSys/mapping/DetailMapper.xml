@@ -1,0 +1,356 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="StuMtrManageSys.dao.DetailMapper">
+	<resultMap id="BaseResultMap" type="StuMtrManageSys.model.Detail">
+		<id column="detail_id" property="detailId" jdbcType="INTEGER" />
+		<result column="detail_recordId" property="detailRecordid"
+			jdbcType="INTEGER" />
+		<result column="detail_mtrId" property="detailMtrid" jdbcType="INTEGER" />
+		<result column="detail_mtrNum" property="detailMtrnum"
+			jdbcType="INTEGER" />
+		<result column="detail_inspState" property="detailInspstate"
+			jdbcType="INTEGER" />
+		<result column="detail_inspector" property="detailInspector"
+			jdbcType="INTEGER" />
+		<result column="detail_inspTime" property="detailInsptime"
+			jdbcType="TIMESTAMP" />
+		<result column="detail_returnState" property="detailReturnstate"
+			jdbcType="INTEGER" />
+		<result column="detail_returnTime" property="detailReturntime"
+			jdbcType="TIMESTAMP" />
+		<result column="detail_returnSituation" property="detailReturnsituation"
+			jdbcType="INTEGER" />
+	</resultMap>
+	<resultMap id="ResultMapWithBLOBs" type="StuMtrManageSys.model.DetailWithBLOBs"
+		extends="BaseResultMap">
+		<result column="detail_postil" property="detailPostil"
+			jdbcType="LONGVARCHAR" />
+		<result column="detail_rejectReason" property="detailRejectreason"
+			jdbcType="LONGVARCHAR" />
+		<result column="detail_applyReason" property="detailApplyreason"
+			jdbcType="LONGVARCHAR" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		detail_id, detail_recordId, detail_mtrId, detail_mtrNum,
+		detail_inspState,
+		detail_inspector,
+		detail_inspTime, detail_returnState,
+		detail_returnTime, detail_returnSituation
+	</sql>
+	<sql id="Blob_Column_List">
+		detail_postil, detail_rejectReason, detail_applyReason
+	</sql>
+	<select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs"
+		parameterType="java.lang.Integer">
+		select
+		<include refid="Base_Column_List" />
+		,
+		<include refid="Blob_Column_List" />
+		from detail
+		where detail_id = #{detailId,jdbcType=INTEGER}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+		delete from detail
+		where detail_id = #{detailId,jdbcType=INTEGER}
+	</delete>
+	<insert id="insert" parameterType="StuMtrManageSys.model.DetailWithBLOBs">
+		insert into detail (detail_id,
+		detail_recordId, detail_mtrId,
+		detail_mtrNum, detail_inspState,
+		detail_inspector,
+		detail_inspTime, detail_returnState,
+		detail_returnTime,
+		detail_returnSituation, detail_postil,
+		detail_rejectReason, detail_applyReason
+		)
+		values
+		(#{detailId,jdbcType=INTEGER}, #{detailRecordid,jdbcType=INTEGER},
+		#{detailMtrid,jdbcType=INTEGER},
+		#{detailMtrnum,jdbcType=INTEGER},
+		#{detailInspstate,jdbcType=INTEGER},
+		#{detailInspector,jdbcType=INTEGER},
+		#{detailInsptime,jdbcType=TIMESTAMP},
+		#{detailReturnstate,jdbcType=INTEGER},
+		#{detailReturntime,jdbcType=TIMESTAMP},
+		#{detailReturnsituation,jdbcType=INTEGER},
+		#{detailPostil,jdbcType=LONGVARCHAR},
+		#{detailRejectreason,jdbcType=LONGVARCHAR},
+		#{detailApplyreason,jdbcType=LONGVARCHAR}
+		)
+	</insert>
+	<insert id="insertSelective" parameterType="StuMtrManageSys.model.DetailWithBLOBs">
+		insert into detail
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="detailId != null">
+				detail_id,
+			</if>
+			<if test="detailRecordid != null">
+				detail_recordId,
+			</if>
+			<if test="detailMtrid != null">
+				detail_mtrId,
+			</if>
+			<if test="detailMtrnum != null">
+				detail_mtrNum,
+			</if>
+			<if test="detailInspstate != null">
+				detail_inspState,
+			</if>
+			<if test="detailInspector != null">
+				detail_inspector,
+			</if>
+			<if test="detailInsptime != null">
+				detail_inspTime,
+			</if>
+			<if test="detailReturnstate != null">
+				detail_returnState,
+			</if>
+			<if test="detailReturntime != null">
+				detail_returnTime,
+			</if>
+			<if test="detailReturnsituation != null">
+				detail_returnSituation,
+			</if>
+			<if test="detailPostil != null">
+				detail_postil,
+			</if>
+			<if test="detailRejectreason != null">
+				detail_rejectReason,
+			</if>
+			<if test="detailApplyreason != null">
+				detail_applyReason,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="detailId != null">
+				#{detailId,jdbcType=INTEGER},
+			</if>
+			<if test="detailRecordid != null">
+				#{detailRecordid,jdbcType=INTEGER},
+			</if>
+			<if test="detailMtrid != null">
+				#{detailMtrid,jdbcType=INTEGER},
+			</if>
+			<if test="detailMtrnum != null">
+				#{detailMtrnum,jdbcType=INTEGER},
+			</if>
+			<if test="detailInspstate != null">
+				#{detailInspstate,jdbcType=INTEGER},
+			</if>
+			<if test="detailInspector != null">
+				#{detailInspector,jdbcType=INTEGER},
+			</if>
+			<if test="detailInsptime != null">
+				#{detailInsptime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="detailReturnstate != null">
+				#{detailReturnstate,jdbcType=INTEGER},
+			</if>
+			<if test="detailReturntime != null">
+				#{detailReturntime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="detailReturnsituation != null">
+				#{detailReturnsituation,jdbcType=INTEGER},
+			</if>
+			<if test="detailPostil != null">
+				#{detailPostil,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="detailRejectreason != null">
+				#{detailRejectreason,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="detailApplyreason != null">
+				#{detailApplyreason,jdbcType=LONGVARCHAR},
+			</if>
+		</trim>
+	</insert>
+	<update id="updateByPrimaryKeySelective" parameterType="StuMtrManageSys.model.DetailWithBLOBs">
+		update detail
+		<set>
+			<if test="detailRecordid != null">
+				detail_recordId = #{detailRecordid,jdbcType=INTEGER},
+			</if>
+			<if test="detailMtrid != null">
+				detail_mtrId = #{detailMtrid,jdbcType=INTEGER},
+			</if>
+			<if test="detailMtrnum != null">
+				detail_mtrNum = #{detailMtrnum,jdbcType=INTEGER},
+			</if>
+			<if test="detailInspstate != null">
+				detail_inspState = #{detailInspstate,jdbcType=INTEGER},
+			</if>
+			<if test="detailInspector != null">
+				detail_inspector = #{detailInspector,jdbcType=INTEGER},
+			</if>
+			<if test="detailInsptime != null">
+				detail_inspTime = #{detailInsptime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="detailReturnstate != null">
+				detail_returnState =
+				#{detailReturnstate,jdbcType=INTEGER},
+			</if>
+			<if test="detailReturntime != null">
+				detail_returnTime =
+				#{detailReturntime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="detailReturnsituation != null">
+				detail_returnSituation =
+				#{detailReturnsituation,jdbcType=INTEGER},
+			</if>
+			<if test="detailPostil != null">
+				detail_postil = #{detailPostil,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="detailRejectreason != null">
+				detail_rejectReason =
+				#{detailRejectreason,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="detailApplyreason != null">
+				detail_applyReason =
+				#{detailApplyreason,jdbcType=LONGVARCHAR},
+			</if>
+		</set>
+		where detail_id = #{detailId,jdbcType=INTEGER}
+	</update>
+	<update id="updateByPrimaryKeyWithBLOBs" parameterType="StuMtrManageSys.model.DetailWithBLOBs">
+		update
+		detail
+		set detail_recordId = #{detailRecordid,jdbcType=INTEGER},
+		detail_mtrId = #{detailMtrid,jdbcType=INTEGER},
+		detail_mtrNum =
+		#{detailMtrnum,jdbcType=INTEGER},
+		detail_inspState =
+		#{detailInspstate,jdbcType=INTEGER},
+		detail_inspector =
+		#{detailInspector,jdbcType=INTEGER},
+		detail_inspTime =
+		#{detailInsptime,jdbcType=TIMESTAMP},
+		detail_returnState =
+		#{detailReturnstate,jdbcType=INTEGER},
+		detail_returnTime =
+		#{detailReturntime,jdbcType=TIMESTAMP},
+		detail_returnSituation =
+		#{detailReturnsituation,jdbcType=INTEGER},
+		detail_postil =
+		#{detailPostil,jdbcType=LONGVARCHAR},
+		detail_rejectReason =
+		#{detailRejectreason,jdbcType=LONGVARCHAR},
+		detail_applyReason =
+		#{detailApplyreason,jdbcType=LONGVARCHAR}
+		where detail_id =
+		#{detailId,jdbcType=INTEGER}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="StuMtrManageSys.model.Detail">
+		update detail
+		set
+		detail_recordId = #{detailRecordid,jdbcType=INTEGER},
+		detail_mtrId =
+		#{detailMtrid,jdbcType=INTEGER},
+		detail_mtrNum =
+		#{detailMtrnum,jdbcType=INTEGER},
+		detail_inspState =
+		#{detailInspstate,jdbcType=INTEGER},
+		detail_inspector =
+		#{detailInspector,jdbcType=INTEGER},
+		detail_inspTime =
+		#{detailInsptime,jdbcType=TIMESTAMP},
+		detail_returnState =
+		#{detailReturnstate,jdbcType=INTEGER},
+		detail_returnTime =
+		#{detailReturntime,jdbcType=TIMESTAMP},
+		detail_returnSituation =
+		#{detailReturnsituation,jdbcType=INTEGER}
+		where detail_id =
+		#{detailId,jdbcType=INTEGER}
+	</update>
+
+
+	<!--根据记录id查询细节 -->
+	<select id="selectByRecordId" resultMap="BaseResultMap"
+		parameterType="java.lang.Integer">
+		select
+		<include refid="Base_Column_List" />
+		from detail
+		where detail_recordId = #{recordId,jdbcType=INTEGER}
+	</select>
+	<!-- 查找借还记录 -->
+	<select id="selectAllDetail" resultType="StuMtrManageSys.selfmodel.BorrowRecordList">
+		SELECT
+		user_name
+		as applyerName,
+		user_loginname
+		as applyerloginName,
+		record_borrowTime as applyTime,
+		detail_inspState as
+		inspState,
+		mtr_name
+		as mtrName,
+		mtr_type as mtrType,
+		detail_mtrNum as applyNum,
+		detail_id as detailId,
+		detail_returnSituation as detailReturnsituation,
+		detail_returnState as returnState,
+		detail_postil as detailPostil,
+		detail_rejectReason as rejectReason
+		from
+		detail,record,`user`,material
+		WHERE
+		detail_recordId = record_id
+		and
+		user_id = record_applyerId
+		and
+		detail_mtrId = mtr_id
+	</select>
+	
+	<!-- 查询借还记录-->
+	<select id="selectAllBorrowAndReturn" resultType="StuMtrManageSys.selfmodel.BorrowAndReturnList">
+SELECT record_id as recordId,
+	`user`.user_id as applyerId,
+	`user`.user_name as applyerName,
+	`user`.user_deptname as applerDept,
+	record_borrowTime as applyTime,
+	detail_inspState as detailInspstate,
+	detail_mtrNum as detailMtrnum,
+	CONCAT(mtr_name,"(颜色：",mtr_color,"大小：",mtr_size,"库存：",mtr_stocknum,"所属部门：",mtr_deptName,")")
+	as mtrInfo,
+	detail_id as detailId,
+	detail_postil as detailApplyreason,
+	inspector.user_name as inspectorName,
+	detail_inspTime as detailInsptime,
+	detail_inspState as detailInspstate,
+	detail_returnSituation as detailReturnsituation,
+	situ_description as returnName,
+	detail_returnState as detailReturnstate,
+	detail_returnTime as detailReturntime,
+	detail_rejectReason as detailRejectreason
+	FROM detail,record,`user`,material,`user` as inspector,returnsituation
+	WHERE detail_recordId = record_id
+	and `user`.user_id = record_applyerId
+	and detail_mtrId = mtr_id
+	and detail_inspector = inspector.user_id
+	and detail_returnSituation = situ_id
+	and `user`.user_id = inspector.user_id
+	ORDER BY record_id,record_borrowTime DESC
+	</select>
+	
+	<!-- 查询所有通过审核，需要归还的物资 -->
+	<select id="selectAllReturnMtr" resultType="StuMtrManageSys.selfmodel.ReturnMtrList">
+		SELECT
+	user_id as applyerId,
+	user_name as applyerName,
+	user_deptname as applerDept,
+	record_borrowTime as applyTime,
+	detail_mtrNum as applyNum,
+	CONCAT(mtr_name,"(颜色：",mtr_color,"大小：",mtr_size,"库存：",mtr_stocknum,"所属部门：",mtr_deptName,")")
+	as mtrInfo,
+	detail_id as detailId,
+	detail_postil as applyReason,
+	mtr_stocknum as stockNum,
+	mtr_id as mtrId
+	FROM record,detail,`user`,material
+	WHERE detail_recordId = record_id
+	and user_id = record_applyerId
+	and detail_mtrId = mtr_id
+	and detail_inspState = 1
+	and detail_returnState = 0
+	ORDER BY detail_inspTime DESC
+	</select>
+</mapper>

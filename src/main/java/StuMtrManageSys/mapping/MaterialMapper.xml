@@ -1,0 +1,278 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="StuMtrManageSys.dao.MaterialMapper">
+	<resultMap id="BaseResultMap" type="StuMtrManageSys.model.Material">
+		<id column="mtr_id" property="mtrId" jdbcType="INTEGER" />
+		<result column="mtr_name" property="mtrName" jdbcType="VARCHAR" />
+		<result column="mtr_totalnum" property="mtrTotalnum" jdbcType="INTEGER" />
+		<result column="mtr_stocknum" property="mtrStocknum" jdbcType="INTEGER" />
+		<result column="mtr_deptName" property="mtrDeptname" jdbcType="VARCHAR" />
+		<result column="mtr_importance" property="mtrImportance"
+			jdbcType="INTEGER" />
+		<result column="mtr_size" property="mtrSize" jdbcType="VARCHAR" />
+		<result column="mtr_color" property="mtrColor" jdbcType="VARCHAR" />
+		<result column="mtr_type" property="mtrType" jdbcType="VARCHAR" />
+	</resultMap>
+	<resultMap id="ResultMapWithBLOBs" type="StuMtrManageSys.model.Material"
+		extends="BaseResultMap">
+		<result column="mtr_postil" property="mtrPostil" jdbcType="LONGVARCHAR" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		mtr_id, mtr_name, mtr_totalnum, mtr_stocknum, mtr_deptName,
+		mtr_importance,
+		mtr_size,
+		mtr_color, mtr_type
+	</sql>
+	<sql id="Blob_Column_List">
+		mtr_postil
+	</sql>
+	<select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs"
+		parameterType="java.lang.Integer">
+		select
+		<include refid="Base_Column_List" />
+		,
+		<include refid="Blob_Column_List" />
+		from material
+		where mtr_id = #{mtrId,jdbcType=INTEGER}
+	</select>
+	<!-- 查询全部物资 -->
+	<select id="selectAll" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		,
+		<include refid="Blob_Column_List" />
+		from material
+	</select>
+	<!--名称 -->
+	<select id="selectMtrByName" resultMap="BaseResultMap"
+		parameterType="java.lang.String">
+		select
+		<include refid="Base_Column_List" />
+		,
+		<include refid="Blob_Column_List" />
+		from material
+		where mtr_name = #{mtrName,jdbcType=VARCHAR}
+	</select>
+	<!-- 类型-->
+	<select id="selectMtrByType" resultMap="BaseResultMap"
+		parameterType="java.lang.String">
+		select
+		<include refid="Base_Column_List" />
+		,
+		<include refid="Blob_Column_List" />
+		from material
+		where mtr_type = #{mtrType,jdbcType=VARCHAR}
+	</select>
+	<!--部门 -->
+	<select id="selectMtrByDept" resultMap="BaseResultMap"
+		parameterType="java.lang.String">
+		select
+		<include refid="Base_Column_List" />
+		,
+		<include refid="Blob_Column_List" />
+		from material
+		where mtr_deptName = #{mtrDeptname,jdbcType=VARCHAR}
+	</select>
+	
+	
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+		delete from
+		material
+		where mtr_id = #{mtrId,jdbcType=INTEGER}
+	</delete>
+	<insert id="insert" parameterType="StuMtrManageSys.model.Material">
+		insert into material (mtr_id,
+		mtr_name, mtr_totalnum,
+		mtr_stocknum, mtr_deptName, mtr_importance,
+		mtr_size, mtr_color, mtr_type,
+		mtr_postil)
+		values
+		(#{mtrId,jdbcType=INTEGER}, #{mtrName,jdbcType=VARCHAR},
+		#{mtrTotalnum,jdbcType=INTEGER},
+		#{mtrStocknum,jdbcType=INTEGER},
+		#{mtrDeptname,jdbcType=VARCHAR}, #{mtrImportance,jdbcType=INTEGER},
+		#{mtrSize,jdbcType=VARCHAR}, #{mtrColor,jdbcType=VARCHAR},
+		#{mtrType,jdbcType=VARCHAR},
+		#{mtrPostil,jdbcType=LONGVARCHAR})
+	</insert>
+	<insert id="insertSelective" parameterType="StuMtrManageSys.model.Material">
+		insert into material
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="mtrId != null">
+				mtr_id,
+			</if>
+			<if test="mtrName != null">
+				mtr_name,
+			</if>
+			<if test="mtrTotalnum != null">
+				mtr_totalnum,
+			</if>
+			<if test="mtrStocknum != null">
+				mtr_stocknum,
+			</if>
+			<if test="mtrDeptname != null">
+				mtr_deptName,
+			</if>
+			<if test="mtrImportance != null">
+				mtr_importance,
+			</if>
+			<if test="mtrSize != null">
+				mtr_size,
+			</if>
+			<if test="mtrColor != null">
+				mtr_color,
+			</if>
+			<if test="mtrType != null">
+				mtr_type,
+			</if>
+			<if test="mtrPostil != null">
+				mtr_postil,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="mtrId != null">
+				#{mtrId,jdbcType=INTEGER},
+			</if>
+			<if test="mtrName != null">
+				#{mtrName,jdbcType=VARCHAR},
+			</if>
+			<if test="mtrTotalnum != null">
+				#{mtrTotalnum,jdbcType=INTEGER},
+			</if>
+			<if test="mtrStocknum != null">
+				#{mtrStocknum,jdbcType=INTEGER},
+			</if>
+			<if test="mtrDeptname != null">
+				#{mtrDeptname,jdbcType=VARCHAR},
+			</if>
+			<if test="mtrImportance != null">
+				#{mtrImportance,jdbcType=INTEGER},
+			</if>
+			<if test="mtrSize != null">
+				#{mtrSize,jdbcType=VARCHAR},
+			</if>
+			<if test="mtrColor != null">
+				#{mtrColor,jdbcType=VARCHAR},
+			</if>
+			<if test="mtrType != null">
+				#{mtrType,jdbcType=VARCHAR},
+			</if>
+			<if test="mtrPostil != null">
+				#{mtrPostil,jdbcType=LONGVARCHAR},
+			</if>
+		</trim>
+	</insert>
+	<update id="updateByPrimaryKeySelective" parameterType="StuMtrManageSys.model.Material">
+		update material
+		<set>
+			<if test="mtrName != null">
+				mtr_name = #{mtrName,jdbcType=VARCHAR},
+			</if>
+			<if test="mtrTotalnum != null">
+				mtr_totalnum = #{mtrTotalnum,jdbcType=INTEGER},
+			</if>
+			<if test="mtrStocknum != null">
+				mtr_stocknum = #{mtrStocknum,jdbcType=INTEGER},
+			</if>
+			<if test="mtrDeptname != null">
+				mtr_deptName = #{mtrDeptname,jdbcType=VARCHAR},
+			</if>
+			<if test="mtrImportance != null">
+				mtr_importance = #{mtrImportance,jdbcType=INTEGER},
+			</if>
+			<if test="mtrSize != null">
+				mtr_size = #{mtrSize,jdbcType=VARCHAR},
+			</if>
+			<if test="mtrColor != null">
+				mtr_color = #{mtrColor,jdbcType=VARCHAR},
+			</if>
+			<if test="mtrType != null">
+				mtr_type = #{mtrType,jdbcType=VARCHAR},
+			</if>
+			<if test="mtrPostil != null">
+				mtr_postil = #{mtrPostil,jdbcType=LONGVARCHAR},
+			</if>
+		</set>
+		where mtr_id = #{mtrId,jdbcType=INTEGER}
+	</update>
+	<update id="updateByPrimaryKeyWithBLOBs" parameterType="StuMtrManageSys.model.Material">
+		update
+		material
+		set mtr_name = #{mtrName,jdbcType=VARCHAR},
+		mtr_totalnum =
+		#{mtrTotalnum,jdbcType=INTEGER},
+		mtr_stocknum =
+		#{mtrStocknum,jdbcType=INTEGER},
+		mtr_deptName =
+		#{mtrDeptname,jdbcType=VARCHAR},
+		mtr_importance =
+		#{mtrImportance,jdbcType=INTEGER},
+		mtr_size =
+		#{mtrSize,jdbcType=VARCHAR},
+		mtr_color = #{mtrColor,jdbcType=VARCHAR},
+		mtr_type = #{mtrType,jdbcType=VARCHAR},
+		mtr_postil =
+		#{mtrPostil,jdbcType=LONGVARCHAR}
+		where mtr_id =
+		#{mtrId,jdbcType=INTEGER}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="StuMtrManageSys.model.Material">
+		update material
+		set mtr_name = #{mtrName,jdbcType=VARCHAR},
+		mtr_totalnum =
+		#{mtrTotalnum,jdbcType=INTEGER},
+		mtr_stocknum =
+		#{mtrStocknum,jdbcType=INTEGER},
+		mtr_deptName =
+		#{mtrDeptname,jdbcType=VARCHAR},
+		mtr_importance =
+		#{mtrImportance,jdbcType=INTEGER},
+		mtr_size =
+		#{mtrSize,jdbcType=VARCHAR},
+		mtr_color = #{mtrColor,jdbcType=VARCHAR},
+		mtr_type = #{mtrType,jdbcType=VARCHAR}
+		where mtr_id =
+		#{mtrId,jdbcType=INTEGER}
+	</update>
+
+	<!--通过部门和类型查找物资 -->
+	<select id="selectMtrByTypeAndDept" resultMap="ResultMapWithBLOBs"
+		parameterType="StuMtrManageSys.model.Material">
+		select
+		<include refid="Base_Column_List" />
+		,
+		<include refid="Blob_Column_List" />
+		from material
+		where mtr_deptName = #{mtrDeptname,jdbcType=VARCHAR} and
+		mtr_type = #{mtrType,jdbcType=VARCHAR}
+	</select>
+
+	<select id="selectByDept" resultMap="ResultMapWithBLOBs"
+		parameterType="StuMtrManageSys.model.Material">
+		select
+		<include refid="Base_Column_List" />
+		,
+		<include refid="Blob_Column_List" />
+		from material
+		where mtr_deptName = #{mtrDeptname,jdbcType=VARCHAR}
+	</select>
+
+	<select id="selectByType" resultMap="ResultMapWithBLOBs"
+		parameterType="StuMtrManageSys.model.Material">
+		select
+		<include refid="Base_Column_List" />
+		,
+		<include refid="Blob_Column_List" />
+		from material
+		where mtr_type = #{mtrType,jdbcType=VARCHAR}
+	</select>
+	<!-- 查询所有可借的物资 -->
+	<select id="selectAllCanBorrow" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		,
+		<include refid="Blob_Column_List" />
+		from material
+		where mtr_stocknum > 0
+	</select>
+</mapper>

@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<!--[if lt IE 7 ]><html lang="en" class="ie6 ielt7 ielt8 ielt9"><![endif]-->
+<!--[if IE 7 ]><html lang="en" class="ie7 ielt8 ielt9"><![endif]-->
+<!--[if IE 8 ]><html lang="en" class="ie8 ielt9"><![endif]-->
+<!--[if IE 9 ]><html lang="en" class="ie9"> <![endif]-->
+<!--[if (gt IE 9)|!(IE)]><!-->
+<html lang="en">
+<!--<![endif]-->
+<head>
+<meta charset="utf-8">
+<title>学生会物资管理系统</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link href="../css/bootstrap.min.css" rel="stylesheet">
+<link href="../css/bootstrap-responsive.min.css" rel="stylesheet">
+<link href="../css/site.css" rel="stylesheet">
+<script src="../javascript/jquery.min.js"></script>
+<!--[if lt IE 9]><script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+</head>
+<body>
+	<div class="container">
+		<div class="navbar">
+			<div class="navbar-inner">
+				<div class="container">
+					<a class="btn btn-navbar" data-toggle="collapse"
+						data-target=".nav-collapse"> <span class="icon-bar"></span> <span
+						class="icon-bar"></span> <span class="icon-bar"></span>
+					</a> <a class="brand" href="#" style="width: 80%; text-align: center;">学生会物资管理系统</a>
+					<div class="nav-collapse">
+						<ul class="nav pull-right">
+							<li><a id="username">用户名</a></li>
+							<li><a href="javascript:logout()">注销</a></li>
+						</ul>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="span2">
+				<div class="well" style="padding: 20px 0;">
+					<ul id="navigation" class="nav nav-list">
+					</ul>
+				</div>
+			</div>
+			<div class="span10">
+				<div class="hero-unit">
+					<h3>物资类型列表</h3>
+
+					<div class="btn-group">
+						<button type="button" class="btn btn-default" data-toggle="modal"
+							data-target="#addModal" onclick="initaddmaterialtype()">增加物资类型</button>
+						<button type="button" data-toggle="modal"
+							data-target="#addZoneModal" class="btn btn-default">增加区域</button>
+					</div>
+
+					<br /> <br />
+					<table class="table">
+						<thead>
+							<tr>
+								<th>序号</th>
+								<th>物资类型</th>
+								<th>存放区域</th>
+								<th>操作</th>
+							</tr>
+
+						</thead>
+						<tbody id="materialTypes">
+						</tbody>
+
+					</table>
+					<div align="center" class="pagination pagination-center">
+						<nav>
+							<ul id="page" class="pagination">
+							</ul>
+							<p id="pagenote"></p>
+						</nav>
+					</div>
+					<!-- 增加物资类型对话框 -->
+					<div class="modal hide fade" style="width: 500px" id="addModal">
+						<div class="modal-header">
+							<button type="button" class="close" data-dismiss="modal"
+								aria-hidden="true">&times;</button>
+							<h3>增加物资类型</h3>
+						</div>
+						<div class="modal-body">
+							<p>
+							
+							<div class="input-group">
+								<span class="input-group-addon">物资类型</span> <input type="text"
+									class="form-control" id="mtrType" placeholder="物资类型" />
+							</div>
+							<div>
+								<span class="input-group-addon">存放区域</span> <select id="mtrZone"
+									class="form-control">
+								</select>
+							</div>
+							</p>
+						</div>
+						<div class="modal-footer">
+							<a href="#" data-dismiss="modal" class="btn">关闭</a>
+							<button type="button" onclick="javascript:addmaterialTypes()"
+								class="btn btn-primary">保存</button>
+						</div>
+					</div>
+					<!-- 对话框结束 -->
+					<!-- 增加区域对话框 -->
+					<div class="modal hide fade" style="width: 500px" id="addZoneModal">
+						<div class="modal-header">
+							<button type="button" class="close" data-dismiss="modal"
+								aria-hidden="true">&times;</button>
+							<h3>增加区域</h3>
+						</div>
+						<div class="modal-body">
+							<p>
+							<div class="input-group">
+								<span class="input-group-addon">存放区域</span> <input type="text"
+									class="form-control" id="zonename" placeholder="存放区域">
+							</div>
+
+							</p>
+						</div>
+						<div class="modal-footer">
+							<a href="#" data-dismiss="modal" class="btn">关闭</a>
+							<button type="button" onclick="javascript:addzone()"
+								class="btn btn-primary">保存</button>
+						</div>
+					</div>
+					<!-- 对话框结束 -->
+					<!-- 修改物资信息对话框 -->
+					<div class="modal hide fade" style="width: 500px" id="updateModal">
+						<div class="modal-header">
+							<button type="button" class="close" data-dismiss="modal"
+								aria-hidden="true">&times;</button>
+							<h3>修改物资信息</h3>
+						</div>
+						<div class="modal-body">
+							<p>
+							<div class="input-group">
+								<span class="input-group-addon">物资类型</span> <input type="text"
+									readOnly=true class="form-control" id="umtrType"
+									placeholder="物资类型">
+							</div>
+							<div class="input-group">
+								<span class="input-group-addon">存放区域</span> <select
+									id="umtrZone" class="form-control">
+								</select>
+							</div>
+							</p>
+
+						</div>
+						<div class="modal-footer">
+							<a href="#" data-dismiss="modal" class="btn">关闭</a>
+							<button type="button" onclick="javascript:updatamaterialtype()"
+								data-dismiss="modal" class="btn btn-primary">保存</button>
+						</div>
+					</div>
+					<!-- 对话框结束 -->
+
+				</div>
+				<table class="table table-bordered table-striped">
+				</table>
+			</div>
+
+		</div>
+	</div>
+	<script src="../javascript/jquery.min.js"></script>
+	<script src="../javascript/bootstrap.min.js"></script>
+	<script src="../javascript/site.js"></script>
+	<script src="../js/common.js"></script>
+	<script src="../js/materialTypeManage.js"></script>
+
+</body>
+</html>

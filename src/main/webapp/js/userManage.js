@@ -1,0 +1,303 @@
+
+var users;
+var pageindex = 1;
+var pagenum;
+var pagecontent = [];
+var userdepartmentstr;
+var userId;
+window.onload = initpage();
+function makepage() {
+	var count = 1;
+	pageindex = 1;
+	pagecontent = [];
+	$("#users").empty();
+	$("#page").empty();
+	$
+			.each(
+					users,
+					function(key, val) {
+						var t = 0;
+						if (count % 8 != 0)
+							t = Math.floor(count / 8) + 1;
+						else
+							t = Math.floor(count / 8);
+						if (val.userLoginname == null)
+							val.userLoginname = "";
+						if (val.userName == null)
+							val.userName = "";
+						if (val.userPassword == null)
+							val.userPassword = "";
+						if (val.userType == null)
+							val.userType = "";
+						if (val.userDeptname == null)
+							val.userDeptname = "";
+						if (val.userTelephone == null)
+							val.userTelephone = "";
+						if (val.userAddress == null)
+							val.userAddress = "";
+						pagecontent[t] += "<tr class='success' ><td>" + count
+								+ "</td><td>" + val.userLoginname + "</td><td>"
+								+ val.userName + "</td><td>"  + val.userType + "</td><td>"
+								+ val.userDeptname + "</td><td>"
+								+ val.userTelephone + "</td><td>"
+								+ val.userAddress + "</td><td>";
+						var operatestr = "<div class='btn-group'><button class='btn' >操作</button>"
+								+ "<button data-toggle='dropdown' class='btn dropdown-toggle'>"
+								+ "<span class='caret'></span></button>"
+								+ "<ul class='dropdown-menu' >"
+								+ "<li><a  data-toggle='modal' data-target='#updateModal' name='"
+								+ "' onclick='javascript:initupdatauser("
+								+ count
+								+ ")'>修改</a></li>"
+								+ "<li><a onclick='javascript:deleteuser("
+								+ val.userId
+								+ ")' >删除</a></li>"
+								+ "</ul>"
+								+ "</div>";
+						pagecontent[t] += operatestr;
+						pagecontent[t] += "</tr>"
+						count++;
+					});
+	if ((count - 1) % 8 == 0)
+		pagenum = Math.floor((count - 1) / 8);
+	else
+		pagenum = Math.floor((count - 1) / 8) + 1;
+	var pagestr;
+	$("#users").append(pagecontent[pageindex]);
+	pagestr = "<li";
+	/*
+	 * if(pageindex==1) pagestr+="class='disabled'";
+	 */
+	var topagenum = 0;
+	topagenum = pageindex - 1;
+	pagestr += "><a  class=‘disabled’ href='javascript:lastpage()'>&laquo;</a></li>";
+	for (var i = 1; i <= pagenum; i++) {
+		pagestr += "<li";
+
+		/*
+		 * if (pageindex == i) pagestr += "class=‘disabled’";
+		 */
+
+		topagenum = pageindex + i - 1;
+		pagestr += "><a href='javascript:topage(" + topagenum + ")'>" + i
+				+ "</a></li>";
+	}
+	pagestr += "<li"
+	/*
+	 * if(pageindex==pagenum) pagestr+="class='disabled'";
+	 */
+	topagenum = pageindex + 1;
+	pagestr += "><a href='javascript:nextpage()'>&raquo;</a></li>";
+	$("#page").append(pagestr);
+	var pagenotestr;
+	pagenotestr =   "第" + pageindex + "页   "+"共" + pagenum + "页";
+	$("#pagenote").empty().append(pagenotestr);
+}
+
+function initpage() {
+	materials = null;
+	$.ajax({
+		type : "post",
+		contentType : "application/x-www-form-urlencoded;charset=UTF-8",
+		url : '/StuMtrManageSys/userController/showAllUser.do',
+		async : false,
+		data : {},
+		dataType : 'json',
+		success : function(msg) {
+			if (msg.result == true) {
+				users = msg.users;
+				makepage();
+			}
+		}
+	});
+
+}
+function nextpage() {
+	if (pageindex < pagenum) {
+		pageindex++;
+		$("#users").empty().append(pagecontent[pageindex]);
+		var pagenotestr;
+		pagenotestr =   "第" + pageindex + "页   "+"共" + pagenum + "页";
+		$("#pagenote").empty().append(pagenotestr);
+	}
+}
+function lastpage() {
+	if (pageindex > 1) {
+		pageindex--;
+		$("#users").empty().append(pagecontent[pageindex]);
+		var pagenotestr;
+		pagenotestr =   "第" + pageindex + "页   "+"共" + pagenum + "页";
+		$("#pagenote").empty().append(pagenotestr);
+	}
+}
+function topage(to) {
+	if (pageindex != to && to >= 1 && to <= pagenum) {
+		pageindex = to;
+		$("#users").empty().append(pagecontent[to]);
+		var pagenotestr;
+		pagenotestr =   "第" + pageindex + "页   "+"共" + pagenum + "页";
+		$("#pagenote").empty().append(pagenotestr);
+	}
+}
+function adduser() {
+	var userLoginname = "", userName = "", userPassword = "", userType = "", userDeptname = "", userTelephone = "", userAddress = "";
+	userLoginname = document.getElementById("userLoginname").value;
+	userName = document.getElementById("userName").value;
+	userPassword = document.getElementById("userPassword").value;
+	userType = document.getElementById("userType").value;
+	userDeptname = document.getElementById("userDeptname").value;
+	userTelephone = document.getElementById("userTelephone").value;
+	userAddress = document.getElementById("userAddress").value;
+	if(userLoginname=="")
+ 		{
+		alert("请输入账号");
+		return;
+	}
+	$.ajax({
+		type : "post",
+		contentType : "application/x-www-form-urlencoded;charset=UTF-8",
+		url : '/StuMtrManageSys/userController/addUser.do',
+		async : false,
+		data : {
+			userLoginname : userLoginname,
+			userName : userName,
+			userPassword : userPassword,
+			userType : userPassword,
+			userDeptname : userDeptname,
+			userTelephone : userTelephone,
+			userAddress : userAddress,
+			userType : userType
+		},
+		dataType : 'json',
+		success : function(msg) {
+			if (msg.result == true) {
+				alert(msg.message);
+			} else {
+				alert(msg.message);
+			}
+		}
+	});
+	initpage();
+	$("#addModal").modal('hide');
+}
+function initselect() {
+
+	userdepartmentstr = null;
+
+	$.ajax({
+		type : "post",
+		contentType : "application/x-www-form-urlencoded;charset=UTF-8",
+		url : '/StuMtrManageSys/departmentController/showAllDepartment.do',
+		async : false,
+		data : {},
+		dataType : 'json',
+		success : function(msg) {
+			if (msg.result == true) {
+				var departments = msg.departments;
+				$.each(departments, function(key, val) {
+					userdepartmentstr += "<option>" + val.deptName
+							+ "</option>";
+				});
+			}
+		}
+	});
+}
+function initadduser() {
+	initselect();
+	$("#userDeptname").empty().append(userdepartmentstr);
+}
+function initupdatauser(count) {
+	// console.log(materials[1]);
+	initselect();
+	$("#uuserDeptname").empty().append(userdepartmentstr);
+	document.getElementById("uuserLoginname").value = users[count - 1].userLoginname;
+	document.getElementById("uuserName").value = users[count - 1].userName;
+	document.getElementById("uuserType").value = users[count - 1].userType;
+	document.getElementById("uuserDeptname").value = users[count - 1].userDeptname;
+	document.getElementById("uuserAddress").value = users[count - 1].userAddress;
+	document.getElementById("uuserTelephone").value = users[count - 1].userTelephone;
+	userId = users[count - 1].userId;
+}
+function updatauser() {
+	var userLoginname = "", userName = "", userPassword = "", userType = "", userDeptname = "", userTelephone = "", userAddress = "";
+	userLoginname = document.getElementById("uuserLoginname").value;
+	userName = document.getElementById("uuserName").value;
+	userType = document.getElementById("uuserType").value;
+	userDeptname = document.getElementById("uuserDeptname").value;
+	userTelephone = document.getElementById("uuserTelephone").value;
+	userAddress = document.getElementById("uuserAddress").value;
+	
+	$.ajax({
+		type : "post",
+		contentType : "application/x-www-form-urlencoded;charset=UTF-8",
+		url : '/StuMtrManageSys/userController/updateUser.do',
+		async : false,
+		data : {
+			userLoginname : userLoginname,
+			userName : userName,
+			userPassword : userPassword,
+			userType : userType,
+			userDeptname : userDeptname,
+			userTelephone : userTelephone,
+			userAddress : userAddress,
+			userId : userId
+		},
+		dataType : 'json',
+		success : function(msg) {
+			if (msg.result == true) {
+				alert(msg.message);
+				initpage();
+			} else {
+				alert(msg.message);
+			}
+		}
+	});
+	$("#updateModal").modal('hide');
+}
+function deleteuser(id) {
+	if (!window.confirm("您确定要删除该用户？")) {
+		return;
+	}
+	$.ajax({
+		type : "post",
+		contentType : "application/x-www-form-urlencoded;charset=UTF-8",
+		url : '/StuMtrManageSys/userController/deleteUser.do',
+		async : false,
+		data : {
+			userId : id
+		},
+		dataType : 'json',
+		success : function(msg) {
+			if (msg.result == true) {
+				initpage();
+			} else {
+				alert(msg.message);
+			}
+		}
+	});
+}
+function searchuserbytype() {
+	var input, type;
+	input = document.getElementById("usersearchinput").value;
+	type = document.getElementById("usersearch").value;
+	users = null;
+	$.ajax({
+		type : "post",
+		contentType : "application/x-www-form-urlencoded;charset=UTF-8",
+		url : '/StuMtrManageSys/userController/searchMaterialByType.do',
+		async : false,
+		data : {
+			input : input,
+			type : type
+		},
+		dataType : 'json',
+		success : function(msg) {
+			if (msg.result == true) {
+				users = msg.users;
+				makepage();
+			} else {
+				alert(msg.message);
+			}
+		}
+	});
+}

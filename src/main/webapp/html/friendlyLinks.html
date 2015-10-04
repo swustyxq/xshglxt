@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<!--[if lt IE 7 ]><html lang="en" class="ie6 ielt7 ielt8 ielt9"><![endif]-->
+<!--[if IE 7 ]><html lang="en" class="ie7 ielt8 ielt9"><![endif]-->
+<!--[if IE 8 ]><html lang="en" class="ie8 ielt9"><![endif]-->
+<!--[if IE 9 ]><html lang="en" class="ie9"> <![endif]-->
+<!--[if (gt IE 9)|!(IE)]><!-->
+<html lang="en">
+<!--<![endif]-->
+<head>
+<meta charset="utf-8">
+<title>学生会物资管理系统</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link href="../css/bootstrap.min.css" rel="stylesheet">
+<link href="../css/bootstrap-responsive.min.css" rel="stylesheet">
+<link href="../css/site.css" rel="stylesheet">
+<script src="../javascript/jquery.min.js"></script>
+<!--[if lt IE 9]><script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+</head>
+<body>
+	<div class="container">
+		<div class="navbar">
+			<div class="navbar-inner">
+				<div class="container">
+					<a class="btn btn-navbar" data-toggle="collapse"
+						data-target=".nav-collapse"> <span class="icon-bar"></span> <span
+						class="icon-bar"></span> <span class="icon-bar"></span>
+					</a> <a class="brand" href="#" style="width:80%;text-align:center;">学生会物资管理系统</a>
+					<div class="nav-collapse">
+						<ul class="nav pull-right">
+							<li><a id="username">用户名</a></li>
+							<li><a href="javascript:logout()">注销</a></li>
+						</ul>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="span2">
+				<div class="well" style="padding: 20px 0;">
+					<ul id="navigation" class="nav nav-list">
+					</ul>
+				</div>
+			</div>
+			<div class="span10">
+				<div class="hero-unit">
+					<table border="0">
+                       <tr>
+                         <td height="70" ><a href="http://www.swust.edu.cn"  target="_blank" ><img src="../img/swust_log.jpg"  width="140" height="70" border="0" /></a></td>
+                         <td height="70" ><a href="http://oa.swust.edu.cn/"  target="_blank"  ><img src="../img/swust_OA.jpg"  width="140" height="70" border="0" /></a></td>
+                         <td height="70" ><a href="http://urp.swust.edu.cn"  target="_blank"  ><img src="../img/swust_urp.jpg"  width="140" height="70" border="0" /></a></td>
+                         <td height="70" ><a href="http://mail.swust.edu.cn"  target="_blank"  ><img src="../img/swust_mail.jpg"  width="140" height="70" border="0" /></a></td>
+                         <td height="70" ><a href="http://www.lib.swust.edu.cn"  target="_blank"  ><img src="../img/swust_lib.jpg"  width="140" height="70" border="0" /></a></td>
+                         <td height="70" ><a href="http://news.swust.edu.cn"  target="_blank"  ><img src="../img/swust_news.jpg"  width="140" height="70" border="0" /></a></td>
+                       </tr>  
+                        <tr>
+                         <td height="70" ><a href="http://cw.swust.edu.cn:8099"  target="_blank" ><img src="../img/swust_cw.jpg"  width="140" height="70" border="0" /></a></td>
+                         <td height="70" ><a href="http://www.jpkc.swust.edu.cn"  target="_blank"  ><img src="../img/swust_JPkc.jpg"  width="140" height="70" border="0" /></a></td>
+                         <td height="70" ><a href="http://www.dean.swust.edu.cn"  target="_blank"  ><img src="../img/swust_jw.jpg"  width="140" height="70" border="0" /></a></td>
+                         <td height="70" ><a href="http://www.kjc.swust.edu.cn/"  target="_blank"  ><img src="../img/swust_kjc.jpg"  width="140" height="70" border="0" /></a></td>
+                         <td height="70" ><a href="http://www.journal.swust.edu.cn/"  target="_blank"  ><img src="../img/swust_xb.jpg"  width="140" height="70" border="0" /></a></td>
+                         <td height="70" ><a href="http://www.bszn.swust.edu.cn/"  target="_blank"  ><img src="../img/swust_bszl.jpg"  width="140" height="70" border="0" /></a></td>
+                       </tr>   
+                       
+                       <tr>
+                         <td height="70" ><a href="http://bbs.swust.edu.cn"  target="_blank" ><img src="../img/swust_BBS.jpg"  width="140" height="70" border="0" /></a></td>
+                         <td height="70" ><a href="http://ecard.swust.edu.cn"  target="_blank"  ><img src="../img/swust_ca.jpg"  width="140" height="70" border="0" /></a></td>
+                         <td height="70" ><a href="http://down.swust.edu.cn"  target="_blank"  ><img src="../img/swust_soft.jpg"  width="140" height="70" border="0" /></a></td>
+                         <td height="70" ><a href="http://60th.swust.edu.cn/map/"  target="_blank"  ><img src="../img/swust_map.jpg"  width="140" height="70" border="0" /></a></td>
+                         <td height="70" ><a href="http://kejian.swust.edu.cn"  target="_blank"  ><img src="../img/swust_kj.jpg"  width="140" height="70" border="0" /></a></td>
+                         <td height="70" ><a href="http://vod2.swust.edu.cn"  target="_blank"  ><img src="../img/swust_VOD.jpg"  width="140" height="70" border="0" /></a></td>
+                       </tr>  
+                        <tr>
+                         <td height="70" ><a href="http://www.swust.edu.cn/s/2/t/851/p/11/c/4327/d/4380/list.htm"  target="_blank" ><img src="../img/swust_gaoxiao.jpg"  width="140" height="70" border="0" /></a></td>
+                         <td height="70" ><a href="http://www.netcenter.swust.edu.cn/"  target="_blank"  ><img src="../img/swust_nic.jpg"  width="140" height="70" border="0" /></a></td>
+                         <td height="70" ><a href="http://www.houqin.swust.edu.cn/Item/1788.aspx"  target="_blank"  ><img src="../img/swust_houqin.jpg"  width="140" height="70" border="0" /></a></td>
+                         <td height="70" ><a href="http://www.swust.edu.cn/s/2/t/851/p/11/c/4327/d/4381/list.htm"  target="_blank"  ><img src="../img/swust_tel.jpg"  width="140" height="70" border="0" /></a></td>
+                         <td height="70" ><img src="../img/swust_yiyuan.jpg"  width="140" height="70" border="0" /></a></td>
+                         <td height="70" ><a href="http://www.baidu.com/"  target="_blank"  ><img src="../img/baidu.jpg"  width="140" height="70" border="0" /></a></td>
+                       </tr>  
+                       </table>
+					
+				</div>
+			 
+			</div>
+			
+			<!-- 页面提示窗口 -->
+			<div id="SysWindow" class="modal fade bs-example-modal-sm" tabindex="-1"
+				role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+
+				<div class="modal-dialog modal-sm">
+					<div class="modal-content">
+						<div class="modal-header">
+							<button class="close" data-dismiss="modal" type="button">
+								<span aria-hidden="true">×</span> 
+															</button>
+							<h4 id="mySmallModalLabel" class="modal-title">系统提示</h4>
+						</div>
+						<div class="modal-body">
+							<p id="SysHint"></p>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!-- 页面提示结束 -->
+		</div>
+	</div>
+	<script src="../javascript/jquery.min.js"></script>
+	<script src="../javascript/bootstrap.min.js"></script>
+	<script src="../javascript/site.js"></script>
+	<script src="../js/common.js"></script>
+</body>
+</html>

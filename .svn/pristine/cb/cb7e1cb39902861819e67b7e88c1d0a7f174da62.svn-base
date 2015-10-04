@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="StuMtrManageSys.dao.RecordMapper" >
+  <resultMap id="BaseResultMap" type="StuMtrManageSys.model.Record" >
+    <id column="record_id" property="recordId" jdbcType="INTEGER" />
+    <result column="record_applyerId" property="recordApplyerid" jdbcType="INTEGER" />
+    <result column="record_borrowTime" property="recordBorrowtime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    record_id, record_applyerId, record_borrowTime
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from record
+    where record_id = #{recordId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from record
+    where record_id = #{recordId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert"  parameterType="StuMtrManageSys.model.Record" >
+    insert into record (record_id, record_applyerId, record_borrowTime
+      )
+    values (#{recordId,jdbcType=INTEGER}, #{recordApplyerid,jdbcType=INTEGER}, #{recordBorrowtime,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="StuMtrManageSys.model.Record" >
+    insert into record
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="recordId != null" >
+        record_id,
+      </if>
+      <if test="recordApplyerid != null" >
+        record_applyerId,
+      </if>
+      <if test="recordBorrowtime != null" >
+        record_borrowTime,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="recordId != null" >
+        #{recordId,jdbcType=INTEGER},
+      </if>
+      <if test="recordApplyerid != null" >
+        #{recordApplyerid,jdbcType=INTEGER},
+      </if>
+      <if test="recordBorrowtime != null" >
+        #{recordBorrowtime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="StuMtrManageSys.model.Record" >
+    update record
+    <set >
+      <if test="recordApplyerid != null" >
+        record_applyerId = #{recordApplyerid,jdbcType=INTEGER},
+      </if>
+      <if test="recordBorrowtime != null" >
+        record_borrowTime = #{recordBorrowtime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where record_id = #{recordId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="StuMtrManageSys.model.Record" >
+    update record
+    set record_applyerId = #{recordApplyerid,jdbcType=INTEGER},
+      record_borrowTime = #{recordBorrowtime,jdbcType=TIMESTAMP}
+    where record_id = #{recordId,jdbcType=INTEGER}
+  </update>
+  
+ <!-- 查询最近插入数据的id -->
+   <select id="selectLastInsertId" resultMap="BaseResultMap" parameterType="StuMtrManageSys.model.Record" >
+    select 
+    <include refid="Base_Column_List" />
+    from record
+    where record_borrowTime = #{recordBorrowtime,jdbcType=TIMESTAMP} and
+    record_applyerId = #{recordApplyerid,jdbcType=INTEGER}
+  </select>
+  
+  <!--根据用户id查询记录  -->
+  <select id="selectByUserId" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from record
+    where record_applyerId = #{userId,jdbcType=INTEGER}
+  </select>
+  
+  <!-- 查找所用需要审核的记录及记录下的物资 -->
+   <select id="selectAllCheckInfo" resultType="StuMtrManageSys.selfmodel.MtrRecordList">
+	SELECT record_id as recordId,
+	user_id as applyerId,
+	user_name as applyerName,
+	user_deptname as applerDept,
+	record_borrowTime as applyTime,
+	detail_inspState as inspState,
+	detail_mtrNum as applyNum,
+	CONCAT(mtr_name,"(颜色：",mtr_color,"大小：",mtr_size,"库存：",mtr_stocknum,"所属部门：",mtr_deptName,")")
+	as mtrInfo,
+	detail_id as detailId,
+	detail_postil as applyReason,
+	mtr_stocknum as stockNum,
+	mtr_id as mtrId
+	FROM detail,record,`user`,material
+	WHERE detail_recordId = record_id
+	and user_id = record_applyerId
+	and detail_mtrId = mtr_id
+	and detail_inspState = 0
+	and detail_inspector is NULL
+	ORDER BY record_id
+	</select>
+</mapper>

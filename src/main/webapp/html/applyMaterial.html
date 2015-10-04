@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<!--[if lt IE 7 ]><html lang="en" class="ie6 ielt7 ielt8 ielt9"><![endif]-->
+<!--[if IE 7 ]><html lang="en" class="ie7 ielt8 ielt9"><![endif]-->
+<!--[if IE 8 ]><html lang="en" class="ie8 ielt9"><![endif]-->
+<!--[if IE 9 ]><html lang="en" class="ie9"> <![endif]-->
+<!--[if (gt IE 9)|!(IE)]><!-->
+<html lang="en">
+<!--<![endif]-->
+<head>
+<meta charset="utf-8">
+<title>学生会物资管理系统</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link href="../css/bootstrap.min.css" rel="stylesheet">
+<link href="../css/bootstrap-responsive.min.css" rel="stylesheet">
+<link href="../css/site.css" rel="stylesheet">
+<script src="../javascript/jquery.min.js"></script>
+<!--[if lt IE 9]><script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+</head>
+<body>
+	<div class="container">
+		<div class="navbar">
+			<div class="navbar-inner">
+				<div class="container">
+					<a class="btn btn-navbar" data-toggle="collapse"
+						data-target=".nav-collapse"> <span class="icon-bar"></span> <span
+						class="icon-bar"></span> <span class="icon-bar"></span>
+					</a> <a class="brand" href="#" style="width:80%;text-align:center;">学生会物资管理系统</a>
+					<div class="nav-collapse">
+						<ul class="nav pull-right">
+							<li><a id="username">用户名</a></li>
+							<li><a href="javascript:logout()">注销</a></li>
+						</ul>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="span3">
+				<div class="well" style="padding: 20px 0;">
+					<ul id="navigation" class="nav nav-list">
+					</ul>
+				</div>
+			</div>
+			<div class="span9">
+				<div class="hero-unit">
+					<div align="center">
+						<h3>物资申请表</h3>
+					</div>
+					<table id="userinfo" class="table table-bordered table-striped">
+					</table>
+
+					<!-- Button trigger modal -->
+					<button type="button" class="btn btn-warning btn-xl"
+						data-toggle="modal" data-target="#mtrModal" onclick="InitOptions()">选择物资</button>
+					<div style="text-align: center;">
+						<table id="mtrinfo" class="table table-bordered table-striped"
+							style="text-align: center;">
+							<thead>
+								<tr></tr>
+								<tr>
+									<td style="width: 12px;">#</td>
+									<td style="width: 60px;">名称</td>
+									<td style="width: 40px;">申请数量</td>
+									<td style="width: 140px;">申请理由</td>
+									<td style="display:none;"></td>
+									<td style="display:none;"></td>
+								</tr>
+							</thead>
+							<tbody id="selectedMtr">
+							</tbody>
+						</table>
+					</div>
+					<div align="right">
+						<button type="button" class="btn btn-success" data-dismiss="modal" onclick="commit()">提交</button>
+						<button type="button" class="btn btn-danger" onclick="javascript:history.go(-1)">取消</button>
+					</div>
+
+				</div>
+			</div>
+			<!-- 右侧列表结束 -->
+			<!-- 物资模态框 -->
+			<div class="modal fade" id="mtrModal" tabindex="-1" role="dialog"
+				aria-labelledby="myModalLabel" aria-hidden="true">
+				<div class="modal-dialog">
+					<div class="modal-content">
+						<div class="modal-header">
+							<button type="button" class="close" data-dismiss="modal">
+								<span aria-hidden="true">&times;</span><span class="sr-only"></span>
+							</button>
+							<h4 class="modal-title" id="myModalLabel">物资仓库</h4>
+						</div>
+						<div class="modal-body">
+							<table>
+								<tr>
+									<td style="align: center;"><div class="form-group">
+											<b>物资类型</b>
+										</div></td>
+									<td align="center"><select id="mtrType"
+										class="form-control" style="width: 130px;">
+									</select></td>
+									<td><div class="form-group">
+											<b>所属部门</b>
+										</div>
+									<td align="center"><select id="department"
+										class="form-control" style="width: 130px;">
+											<option>全部</option>
+											<option>权益部</option>
+											<option>体育部</option>
+											<option>文化部</option>
+											<option>科技部</option>
+											<option>学习部</option>
+											<option>素拓部</option>
+											<option>秘书处</option>
+									</select></td>
+									<td style="align: center;">
+										<button type="button" class="btn btn-primary"
+											onclick="search()">搜索</button>
+									</td>
+								</tr>
+							</table>
+
+							<table class="table">
+								<thead>
+									<tr></tr>
+									<tr>
+										<th>#</th>
+										<th>名称</th>
+										<th>库存</th>
+										<th>规格</th>
+										<th>部门</th>
+										<th>选择</th>
+									</tr>
+								</thead>
+								<tbody id="neededMtr">
+								</tbody>
+							</table>
+							<div style="text-align: center">
+								<div class="pagination pagination-center">
+									<nav >
+										<ul id="pageIndex" class="pagination">
+											
+										</ul>
+									</nav>
+								</div>
+							</div>
+						</div>
+						<div class="modal-footer">
+							<button type="button" class="btn btn-primary"
+								data-dismiss="modal" onclick="sureMtr()">确定</button>
+						</div>
+					</div>
+				</div>
+			</div>
+			
+			<!-- 页面提示窗口 -->
+		<div class="modal fade bs-example-modal-sm in" id="SysWindow" tabindex="-1"
+			role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="false"  style="display: none;">
+			<div class="modal-dialog modal-sm">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button class="close" data-dismiss="modal" type="button">
+							<span aria-hidden="true">×</span> 
+						</button>
+						<h4 id="mySmallModalLabel" class="modal-title">系统提示</h4>
+					</div>
+					<div id="SysHint" class="modal-body"></div>
+				</div>
+			</div>
+		</div>
+		<!-- 页面提示结束 -->
+		</div>
+	</div>
+	<script src="../javascript/jquery.min.js"></script>
+	<script src="../javascript/bootstrap.min.js"></script>
+	<script src="../javascript/site.js"></script>
+	<script src="../js/common.js"></script>
+	<script src="../js/apply.js"></script>
+</body>
+</html>

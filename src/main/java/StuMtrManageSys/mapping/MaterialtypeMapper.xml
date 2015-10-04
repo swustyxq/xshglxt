@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="StuMtrManageSys.dao.MaterialtypeMapper">
+	<resultMap id="BaseResultMap" type="StuMtrManageSys.model.Materialtype">
+		<id column="type_name" property="typeName" jdbcType="VARCHAR" />
+		<result column="type_zoneId" property="typeZoneid" jdbcType="INTEGER" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		type_name, type_zoneId
+	</sql>
+	<select id="selectByPrimaryKey" resultMap="BaseResultMap"
+		parameterType="java.lang.String">
+		select
+		<include refid="Base_Column_List" />
+		from materialtype
+		where type_name = #{typeName,jdbcType=VARCHAR}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+		delete from
+		materialtype
+		where type_name = #{typeName,jdbcType=VARCHAR}
+	</delete>
+	<insert id="insert" parameterType="StuMtrManageSys.model.Materialtype">
+		insert into materialtype
+		(type_name, type_zoneId)
+		values (#{typeName,jdbcType=VARCHAR},
+		#{typeZoneid,jdbcType=INTEGER})
+	</insert>
+	<insert id="insertSelective" parameterType="StuMtrManageSys.model.Materialtype">
+		insert into materialtype
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="typeName != null">
+				type_name,
+			</if>
+			<if test="typeZoneid != null">
+				type_zoneId,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="typeName != null">
+				#{typeName,jdbcType=VARCHAR},
+			</if>
+			<if test="typeZoneid != null">
+				#{typeZoneid,jdbcType=INTEGER},
+			</if>
+		</trim>
+	</insert>
+	<update id="updateByPrimaryKeySelective" parameterType="StuMtrManageSys.model.Materialtype">
+		update materialtype
+		<set>
+			<if test="typeZoneid != null">
+				type_zoneId = #{typeZoneid,jdbcType=INTEGER},
+			</if>
+		</set>
+		where type_name = #{typeName,jdbcType=VARCHAR}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="StuMtrManageSys.model.Materialtype">
+		update
+		materialtype
+		set type_zoneId = #{typeZoneid,jdbcType=INTEGER}
+		where
+		type_name = #{typeName,jdbcType=VARCHAR}
+	</update>
+
+	<!-- 查询全部物资类型 -->
+	<!-- <select id="selectAllMaterialtype" resultMap="BaseResultMap" > select 
+		type_name as typeName from materialtype </select> -->
+	<select id="selectAllMaterialtype" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from materialtype
+	</select>
+
+	<select id="selectAllMaterialtypeAndZone" resultType="StuMtrManageSys.selfmodel.MaterialtypeAndZone">
+		select
+		zone_id as zoneId,
+		zone_name as zoneName,
+		type_name as typeName
+		from
+		materialtype,zone
+		where type_zoneId=zone_id
+	</select>
+	<update id="updateMaterialtype" parameterType="StuMtrManageSys.selfmodel.UpdateMaterialType">
+		update materialtype
+		<set>
+			type_zoneId = #{zoneid,jdbcType=INTEGER},
+			type_name =#{typename,jdbcType=VARCHAR}
+		</set>
+		where type_name = #{pretypename,jdbcType=VARCHAR}
+	</update>
+</mapper>
+

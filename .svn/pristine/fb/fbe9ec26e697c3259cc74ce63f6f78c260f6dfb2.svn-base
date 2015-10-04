@@ -1,0 +1,290 @@
+/*author：Simon
+ * Time：2015.1.13
+ * Function：审核物资
+ * */
+
+var allCheckRecords;//存放所有需要审核的物资信息
+var curInspectRecordPos=0;//存放当前审核的记录位置
+
+window.onload=function(){
+	UpdateDetailRecords();
+	InitPage();
+	/*归还的初始化*/
+	obtainAllPassMtr();
+	InitReturnPage();
+}
+
+function UpdateDetailRecords(){
+	$.ajax({
+		type : "post",
+		contentType : "application/x-www-form-urlencoded;charset=UTF-8",
+		url : '/StuMtrManageSys/recordController/findAllCheckInfo.do',
+		async : false,
+		data : {},
+		dataType : 'json',
+		success : function(msg) {
+			if (msg.result == true) {
+				allCheckRecords = msg.mtrRecordLists;
+			}
+		},
+		error : function(msg) {
+			alert("网络超时!");
+		}
+	});
+}
+
+function InitPage(){
+	showPage(1);
+	var pageStr="<li><a href='#'>&laquo;</a></li>";
+	var totalPage=0;
+	if (allCheckRecords[0].recordCount % 5 == 0){
+		totalPage = (allCheckRecords[0].recordCount/5|0)-1;
+	}else{
+		totalPage = allCheckRecords[0].recordCount/5|0;
+	}
+	for (var i=0;i <= totalPage;i++){
+		/*if (allCheckRecords[0].recordCount/5)*/
+		pageStr += "<li><a href='javascript:showPage("+(i+1)+")'>"+(i+1)+"</a></li>";
+	}
+	pageStr += "<li><a href='#'>&raquo;</a></li>"
+		+ "<p>总页数："+(totalPage+1)+"</p>";
+	$("#pageIndex").empty().append(pageStr);
+}
+
+function showPage(index){
+	/*allCheckRecords[allCheckRecords[0].recordPos[5*(index-1)+i]];*/
+	var key=5*(index-1)+1;
+	var strList="";
+	for (var i=0;i < 5;i++){
+		if (5*(index-1)+i < allCheckRecords[0].recordCount){
+			strList += "<tr>"
+				+ "<td>"+key+"</td>"
+				+ "<td>"+allCheckRecords[allCheckRecords[0].recordPos[5*(index-1)+i]].applyerName+"</td>"
+				+ "<td>"+allCheckRecords[allCheckRecords[0].recordPos[5*(index-1)+i]].applerDept+"</td>"
+				+ "<td>"+allCheckRecords[allCheckRecords[0].recordPos[5*(index-1)+i]].applyTurnTime+"</td>"
+				+ "<td><button type='submit' class='btn btn-success btn-xs' " +
+						"onclick='inspect("+allCheckRecords[0].recordPos[5*(index-1)+i]+")'>审核</button></td>";
+				key++;
+		}else{
+			break;
+		}	
+	}
+	$("#neededCheckMtr").empty().append(strList);
+}
+function inspect(recordPos){
+	curInspectRecordPos = recordPos;
+	var applyerInfo="";
+	applyerInfo += "<tr>" + "<td><b>申请人</b> </td> <td>" + allCheckRecords[recordPos].applyerName + " </td>"
+	+ "<td><b>所属部门</td></b><td>" + allCheckRecords[recordPos].applerDept + "</td>" + "</tr>"
+	+ "<tr>" + "<td ><b>申请时间</b></td> <td colspan='3'>" + allCheckRecords[recordPos].applyTurnTime + "</td></tr>>"
+	$("#applyerInfo").empty().append(applyerInfo);
+	var detailStr="";
+	var index = 1;
+	for (var i=0;i < allCheckRecords.length;i++){
+		if (allCheckRecords[i].recordId == allCheckRecords[recordPos].recordId){
+			detailStr += "<tr><td>"+index+"</td>"
+				+ "<td><textarea readonly style='resize:none;height:40px;'>"+allCheckRecords[i].mtrInfo+"</textarea></td>"
+				+ "<td>"+allCheckRecords[i].applyNum+"</td>"
+				+ "<td><textarea readonly style='resize:none;height:40px;width:80px'>"+allCheckRecords[i].applyReason+"</textarea></td>"
+				+ "<td><div class='btn-group'>"
+				+ "<button class='btn'>操作</button>"
+				+ "<button class='btn dropdown-toggle' data-toggle='dropdown'>"
+				+ "<span class='caret'></span></button>"
+				+ "<ul class='dropdown-menu'>"
+				+ "<li><a onclick='javascript:passInspect("+allCheckRecords[i].detailId+")'>通过</a></li>"
+				+ "<li><a onclick='javascript:turnToReject("+allCheckRecords[i].detailId+")'>驳回</a></li>"
+				+ "</ul></div></button></td></tr>";
+			index++;
+		}
+	}
+	$("#detailMtr").empty().append(detailStr);
+	$("#detailModal").modal('show');
+}
+
+function passInspect(detailId){
+	if (!confirm("您确定要通过该物资申请？")){
+		return;
+	}
+	
+	checkDetail(detailId,true,"");
+}
+
+function turnToReject(detailId){
+	var str="";
+	str += "<td colspan='5'><p style='color:red'>驳回理由<input id='rejectReason' type='text' class='form-control'>"
+					+		"<button type='button' class='btn btn-danger'"
+					+ "onclick='reject("+detailId+")'>驳回</button></p></td>";
+	$("#rejectObj").empty().append(str);
+	document.getElementById("rejectObj").style.display = "table-row";
+}
+
+function reject(detailId){
+	if (!confirm("您确定要驳回该物资申请？")){
+		document.getElementById("rejectObj").style.display = "none";
+		return;
+	}
+	var rejectReson="";
+	rejectReason = document.getElementById("rejectReason").value;
+	checkDetail(detailId, false, rejectReason);
+}
+
+function checkDetail(detailId,result,rejectReason){
+	$.ajax({
+		type : "post",
+		contentType : "application/x-www-form-urlencoded;charset=UTF-8",
+		url : '/StuMtrManageSys/detailController/checkDetail.do',
+		async : false,
+		data : {
+			detailId:detailId,
+			result:result,
+			rejectReason:rejectReason
+		},
+		dataType : 'json',
+		success : function(msg) {
+			if (msg.result == true) {
+				if (result == false){//审核不通过，将物资数量恢复
+					var mtrId = 0, mtrNum = 0;
+					for (var i = 0;i < allCheckRecords.length;i++){
+						if (allCheckRecords[i].detailId == detailId){
+							mtrId = allCheckRecords[i].mtrId;
+							mtrNum = allCheckRecords[i].applyNum + allCheckRecords[i].stockNum;
+							break;
+						}
+					}
+					$.ajax({
+						type : "post",
+						contentType : "application/x-www-form-urlencoded;charset=UTF-8",
+						url : '/StuMtrManageSys/materialController/updateMtrNum.do',
+						async : false,
+						data : {
+							mtrId:mtrId,
+							mtrNum:mtrNum
+						},
+						dataType : 'json',
+						success : function(msg) {
+							if (msg.result == true) {
+								document.getElementById("rejectObj").style.display = "none";
+							}
+						},
+						error : function(msg) {
+							alert("网络超时!");
+						}
+					});
+				}
+				var str = "<font color='red'>操作成功</font>";
+				UpdateDetailRecords();
+				inspect(curInspectRecordPos);
+				$("#SysHint").empty().append(str);
+				$("#SysWindow").modal('show');
+			}
+		},
+		error : function(msg) {
+			alert("网络超时!");
+		}
+	});
+}
+
+/************************************************以下为归还物资的js代码******************************************/
+/*Function：归还物资
+ * Author：Simon
+ * Time：2015.1.15
+ */
+
+/*需要归还的物资列表*/
+var ReturnMtrs=[];
+/*所有归还情况*/
+var returnSitu=[];
+
+/*获得所有得到批准的物资*/
+function obtainAllPassMtr(){
+	$.ajax({
+		type : "post",
+		contentType : "application/x-www-form-urlencoded;charset=UTF-8",
+		url : '/StuMtrManageSys/detailController/obtainAllReturnMtr.do',
+		async : false,
+		data : {}, 
+		dataType : 'json',
+		success : function(msg) {			
+			if (msg.result == true){
+				ReturnMtrs = msg.returnMtrLists;
+				returnSitu = msg.returnsituations;
+			}
+		},error: function(msg){
+		    alert("网络超时!");
+		}
+	});
+}
+
+/*初始化第一页*/
+function InitReturnPage(){
+	showReturnPage(1);
+	var pageStr="<li><a href='#'>&laquo;</a></li>";
+	var totalPage=0;
+	if (ReturnMtrs.length % 5 == 0){
+		totalPage = (ReturnMtrs.length/5|0)-1;
+	}else{
+		totalPage = ReturnMtrs.length/5|0;
+	}
+	for (var i=0;i <= totalPage;i++){
+		pageStr += "<li><a href='javascript:showPage("+(i+1)+",true)'>"+(i+1)+"</a></li>";
+	}
+	pageStr += "<li><a href='#'>&raquo;</a></li>"
+		+ "<p>总页数："+(totalPage+1)+"</p>";
+	$("#returnIndex").empty().append(pageStr);
+}
+
+/*展示一页*/
+function showReturnPage(index){
+	var key=5*(index-1)+1;
+	var strList="";
+	for (var i=0;i < 5;i++){
+		if (5*(index-1)+i < ReturnMtrs.length){
+			strList += "<tr>" + "<td>" + key + "</td>" + "<td>" + ReturnMtrs[5*(index-1)+i].applyerName + "</td>" + "<td>"
+			+ ReturnMtrs[5*(index-1)+i].mtrInfo + "</td>" + "<td>" + ReturnMtrs[5*(index-1)+i].applyTurnTime +  "</td>" 
+			+ "<td>" + ReturnMtrs[5*(index-1)+i].applyNum + "</td>";
+			strList += "<td><select  style='width: 100px;'class='form-control' id='"+i+"'>";
+			for (var j = 0;j < returnSitu.length;j++){
+				strList += "<option value='"+(j+1)+"'>"+returnSitu[j].situDescription+"</option>";
+			}
+			strList += "</select></td>"
+				+ "<td><button type='button' class='btn btn-primary' onclick=" +
+						"'returnMtr("+ReturnMtrs[5*(index-1)+i].detailId+","+ReturnMtrs[5*(index-1)+i].mtrId+","+i+","+(ReturnMtrs[5*(index-1)+i].applyNum+ReturnMtrs[5*(index-1)+i].stockNum)+")'>归还" +
+						"</button></td>";
+			key++;
+		}else{
+			break;
+		}	
+	}
+	$("#neededReturnMtr").empty().append(strList);
+}
+
+function returnMtr(detailId,mtrId,index,mtrNum){
+	if ( !confirm("您确定该该物资已归还 ?")){
+		return;
+	}
+	var returnSitu = document.getElementById(index);
+	$.ajax({
+		type : "post",
+		contentType : "application/x-www-form-urlencoded;charset=UTF-8",
+		url : '/StuMtrManageSys/detailController/returnMtr.do',
+		async : false,
+		data : {
+			mtrId:mtrId, 
+			mtrNum:mtrNum,
+			situation:returnSitu.value,
+			detailId:detailId
+		}, 
+		dataType : 'json',
+		success : function(msg) {			
+			if (msg.result == true){
+				obtainAllPassMtr();
+				showReturnPage(1);
+				var str = "<font color='red'>操作成功</font>";
+				$("#SysHint").empty().append(str);
+				$("#SysWindow").modal('show');
+			}
+		},error: function(msg){
+		    alert("网络超时!");
+		}
+	});
+}

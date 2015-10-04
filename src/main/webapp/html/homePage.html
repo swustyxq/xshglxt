@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<!--[if lt IE 7 ]><html lang="en" class="ie6 ielt7 ielt8 ielt9"><![endif]-->
+<!--[if IE 7 ]><html lang="en" class="ie7 ielt8 ielt9"><![endif]-->
+<!--[if IE 8 ]><html lang="en" class="ie8 ielt9"><![endif]-->
+<!--[if IE 9 ]><html lang="en" class="ie9"> <![endif]-->
+<!--[if (gt IE 9)|!(IE)]><!-->
+<html lang="en">
+<!--<![endif]-->
+<head>
+<meta charset="utf-8">
+<title>学生会物资管理系统</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link href="../css/bootstrap.min.css" rel="stylesheet">
+<link href="../css/bootstrap-responsive.min.css" rel="stylesheet">
+<link href="../css/site.css" rel="stylesheet">
+<script src="../javascript/jquery.min.js"></script>
+<!--[if lt IE 9]><script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+</head>
+<body>
+	<div class="container">
+		<div class="navbar">
+			<div class="navbar-inner">
+				<div class="container">
+					<a class="btn btn-navbar" data-toggle="collapse"
+						data-target=".nav-collapse"> <span class="icon-bar"></span> <span
+						class="icon-bar"></span> <span class="icon-bar"></span>
+					</a> <a class="brand" href="#" style="width: 80%; text-align: center;">学生会物资管理系统</a>
+					<div class="nav-collapse">
+						<ul class="nav pull-right">
+							<li><a id="username">用户名</a></li>
+							<li><a href="javascript:logout()">注销</a></li>
+						</ul>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="span3">
+				<div class="well" style="padding: 20px 0;">
+					<ul id="navigation" class="nav nav-list">
+						<li class="nav-header">导航</li>
+						<li class="active"><a href="homePage.html"><i class="icon-home"></i> 首页</a></li>
+						<li><a href="material.html"><i class="icon-folder-open"></i>物资列表</a></li>
+						<li class="goodsND systemND" style="display: none;"><a
+							href="checkMaterial.html"><i class="icon-folder-open"></i>待审核物资</a>
+						</li>
+						<li class="goodsND systemND" style="display: none;"><a
+							href="borroweRecord.html"><i class="icon-folder-open"></i>借还记录</a>
+						</li>
+						<li class="commonND" style="display: block;"><a
+							href="applyMaterial.html"><i class="icon-check"></i>申请物资</a></li>
+						<li class="systemND" style="display: none;"><a
+							href="userManagement.html"><i class="icon-folder-open"></i>用户管理</a></li>
+						<li class="nav-header">个人中心</li>
+						<li class="commonND" style="display: block;"><a
+							href="borroweRecord.html"><i class="icon-user "></i>借还记录</a></li>
+						<li><a href="personalData.html"><i class="icon-cog"></i>我的资料</a></li>
+						<li id="chagpwd"><a data-toggle="modal"
+							data-target="#chagpwdMdl"><i class="icon-cog"></i>修改密码</a></li>
+						<div class="modal fade" id="chagpwdMdl" tabindex="-1"
+							role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+							<div class="modal-dialog">
+								<div class="modal-content">
+									<div class="modal-header">
+										<button type="button" class="close" data-dismiss="modal">
+											<span aria-hidden="true">×</span><span class="sr-only"></span>
+										</button>
+									</div>
+									<div class="modal-body">
+										<div class="control-group">
+											<center>
+												<div
+													style="color: #333; font-size: 14px; line-height: 20px; padding: 8px 0 12px 0;">
+													<span id="chgpUsnm"></span>
+												</div>
+												<input id="oldassword" placeholder="原密码" type="password" maxLength="16"/><br>
+												<input id="newPassword" placeholder="新密码" type="password" maxLength="16"/><br>
+												<input id="confirmPassword" placeholder="确认密码" type="password" maxLength="16"/><br>
+											</center>
+										</div>
+									</div>
+									<div class="modal-footer">
+										<button type="button" class="btn btn-default"
+											data-dismiss="modal">取消</button>
+										<button type="button" class="btn btn-primary" id="savePSW">保存</button>
+									</div>
+								</div>
+							</div>
+						</div>
+						<li class="divider"></li>
+						<li class="nav-header"><a href="homePage.html">帮助</a></li>
+						<li ><a href="instruction.html"><i
+								class="icon-blue icon-info-sign"></i>使用说明</a></li>
+						<li><a href="systemDesc.html"><i class="icon-picture"></i>系统说明</a></li>
+						<li><a href="friendlyLinks.html"><i class="icon-stop"></i>友情链接</a></li>
+					</ul>
+				</div>
+			</div>
+			<div class="span9">
+				<div class="hero-unit">
+					<div id="myCarousel" class="carousel slide">
+						<!-- Carousel items -->
+						<div class="carousel-inner">
+							<div class="active item">
+								<img src="../img/1.jpg" />
+							</div>
+							<div class="item">
+								<img src="../img/2.jpg" />
+							</div>
+							<div class="item">
+								<img src="../img/3.jpg" />
+							</div>
+						</div>
+						<!-- Carousel nav -->
+						<a class="carousel-control left" href="#myCarousel"
+							data-slide="prev">&lsaquo;</a> <a class="carousel-control right"
+							href="#myCarousel" data-slide="next">&rsaquo;</a>
+					</div>
+				</div>
+				<table class="table table-bordered table-striped">
+				</table>
+			</div>
+		</div>
+	</div>
+	<script src="../javascript/jquery.min.js"></script>
+	<script src="../javascript/bootstrap.min.js"></script>
+	<script src="../javascript/site.js"></script>
+	<script src="../js/common.js"></script>
+	<script src="../js/changePSW.js"></script>
+</body>
+</html>

@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="StuMtrManageSys.dao.ReturnsituationMapper" >
+  <resultMap id="BaseResultMap" type="StuMtrManageSys.model.Returnsituation" >
+    <id column="situ_id" property="situId" jdbcType="INTEGER" />
+  </resultMap>
+  <resultMap id="ResultMapWithBLOBs" type="StuMtrManageSys.model.Returnsituation" extends="BaseResultMap" >
+    <result column="situ_description" property="situDescription" jdbcType="LONGVARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    situ_id
+  </sql>
+  <sql id="Blob_Column_List" >
+    situ_description
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from returnsituation
+    where situ_id = #{situId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from returnsituation
+    where situ_id = #{situId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="StuMtrManageSys.model.Returnsituation" >
+    insert into returnsituation (situ_id, situ_description)
+    values (#{situId,jdbcType=INTEGER}, #{situDescription,jdbcType=LONGVARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="StuMtrManageSys.model.Returnsituation" >
+    insert into returnsituation
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="situId != null" >
+        situ_id,
+      </if>
+      <if test="situDescription != null" >
+        situ_description,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="situId != null" >
+        #{situId,jdbcType=INTEGER},
+      </if>
+      <if test="situDescription != null" >
+        #{situDescription,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="StuMtrManageSys.model.Returnsituation" >
+    update returnsituation
+    <set >
+      <if test="situDescription != null" >
+        situ_description = #{situDescription,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where situ_id = #{situId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="StuMtrManageSys.model.Returnsituation" >
+    update returnsituation
+    set situ_description = #{situDescription,jdbcType=LONGVARCHAR}
+    where situ_id = #{situId,jdbcType=INTEGER}
+  </update>
+  
+  <!-- 查询所有的归还情况 -->
+  <select id="selectAll" resultMap="ResultMapWithBLOBs" >
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from returnsituation
+  </select>
+</mapper>

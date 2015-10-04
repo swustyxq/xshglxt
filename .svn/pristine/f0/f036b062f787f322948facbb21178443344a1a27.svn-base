@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<!--[if lt IE 7 ]><html lang="en" class="ie6 ielt7 ielt8 ielt9"><![endif]-->
+<!--[if IE 7 ]><html lang="en" class="ie7 ielt8 ielt9"><![endif]-->
+<!--[if IE 8 ]><html lang="en" class="ie8 ielt9"><![endif]-->
+<!--[if IE 9 ]><html lang="en" class="ie9"> <![endif]-->
+<!--[if (gt IE 9)|!(IE)]><!-->
+<html lang="en">
+<!--<![endif]-->
+<head>
+<meta charset="utf-8">
+<title>学生会物资管理系统</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link href="../css/bootstrap.min.css" rel="stylesheet">
+<link href="../css/bootstrap-responsive.min.css" rel="stylesheet">
+<link href="../css/site.css" rel="stylesheet">
+<script src="../javascript/jquery.min.js"></script>
+<!--[if lt IE 9]><script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+</head>
+<body>
+	<div class="container">
+		<div class="navbar">
+			<div class="navbar-inner">
+				<div class="container">
+					<a class="btn btn-navbar" data-toggle="collapse"
+						data-target=".nav-collapse"> <span class="icon-bar"></span> <span
+						class="icon-bar"></span> <span class="icon-bar"></span>
+					</a> <a class="brand" href="#" style="width: 80%; text-align: center;">计科学院学生会物资管理系统</a>
+					<div class="nav-collapse">
+						<ul class="nav pull-right">
+							<li><a id="username">用户名</a></li>
+							<li><a href="javascript:logout()">注销</a></li>
+						</ul>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="span2">
+				<div class="well" style="padding: 20px 0;">
+					<ul id="navigation" class="nav nav-list">
+					</ul>
+				</div>
+			</div>
+			<div class="span10">
+				<div class="hero-unit">
+					<h3 contenteditable="true">物资列表</h3>
+					<div class="btn-group">
+						<button type="button" class="btn btn-default" data-toggle="modal"
+							id="addmaterial" data-target="#addModal"
+							onclick="initaddmaterial()">增加物资</button>
+					</div>
+					<div class="pull-right form-inline">
+						<div>
+							<input type="text" data-provide="typeahead" style="width: 120px"
+								id="materialsearchinput"> <select id="materialsearch"
+								class="form-control" onchange="cityChange()"
+								style="width: 100px;">
+								<option>物资名称</option>
+								<option>物资类型</option>
+								<option>所属部门</option>
+							</select>
+							<button class="btn" onclick="javascript:searchmaterialbytype()">查找</button>
+						</div>
+					</div>
+
+					<table class="table">
+						<thead>
+							<tr>
+								<th>序号</th>
+								<th>名称</th>
+								<th>颜色</th>
+								<th>大小</th>
+								<th>剩余数量</th>
+								<th>总数</th>
+								<th>类型</th>
+								<th>所属部门</th>
+								<th>重要程度</th>
+								<th>备注</th>
+								<th id="handler">操作</th>
+							</tr>
+						</thead>
+						<tbody id="materials">
+						</tbody>
+					</table>
+					<div  align="center" class="pagination pagination-center">
+						<nav>
+							<ul id="page" class="pagination">
+							</ul>
+						</nav>
+						<p id="pagenote"></p>
+					</div>
+					<!-- 增加物资对话框 -->
+					<div class="modal hide fade" style="width: 500px" id="addModal">
+						<div class="modal-header">
+							<button type="button" class="close" data-dismiss="modal"
+								aria-hidden="true">&times;</button>
+							<h3>增加物资</h3>
+						</div>
+						<div class="modal-body">
+							<p>
+							<div class="input-group">
+								<span class="input-group-addon">名称</span> <input type="text"
+									class="form-control" id="mtrName" placeholder="物资名称">
+							</div>
+							<div class="input-group">
+								<span class="input-group-addon">颜色</span> <input type="text"
+									class="form-control" id="mtrColor" placeholder="物资颜色">
+							</div>
+							<div class="input-group">
+								<span class="input-group-addon">大小</span> <input type="text"
+									class="form-control" id="mtrSize" placeholder="物资大小">
+							</div>
+							<div class="input-group">
+								<span class="input-group-addon">剩余数量</span> <input type="text"
+									class="form-control" id="mtrStocknum" placeholder="剩余数量">
+							</div>
+							<div class="input-group">
+								<span class="input-group-addon">总数</span> <input type="text"
+									class="form-control" id="mtrTotalnum" placeholder="总数">
+							</div>
+							<div>
+								<span class="input-group-addon">类型</span> <select id="mtrType"
+									class="form-control">
+								</select>
+							</div>
+							<div>
+								<span class="input-group-addon">所属部门</span> <select
+									id="mtrDeptname" class="form-control">
+								</select>
+							</div>
+							<div class="input-group">
+								<span class="input-group-addon">重要程度</span> <input type="text"
+									class="form-control" id="mtrImportance" placeholder="重要程度">
+							</div>
+							<div class="input-group">
+								<span class="input-group-addon">备注</span> <input type="text"
+									class="form-control" id="mtrPostil" placeholder="备注">
+							</div>
+							</p>
+						</div>
+						<div class="modal-footer">
+							<a href="#" data-dismiss="modal" class="btn">关闭</a>
+							<button type="button" onclick="javascript:addmaterials()"
+								class="btn btn-primary">保存</button>
+						</div>
+					</div>
+					<!-- 对话框结束 -->
+					<!-- 修改物资信息对话框 -->
+					<div class="modal hide fade" style="width: 500px" id="updateModal">
+						<div class="modal-header">
+							<button type="button" class="close" data-dismiss="modal"
+								aria-hidden="true">&times;</button>
+							<h3>修改物资信息</h3>
+						</div>
+						<div class="modal-body">
+							<p>
+							<div class="input-group">
+								<span class="input-group-addon">名称</span> <input type="text"
+									class="form-control" id="umtrName" placeholder="物资名称">
+							</div>
+							<div class="input-group">
+								<span class="input-group-addon">颜色</span> <input type="text"
+									class="form-control" id="umtrColor" placeholder="物资颜色">
+							</div>
+							<div class="input-group">
+								<span class="input-group-addon">大小</span> <input type="text"
+									class="form-control" id="umtrSize" placeholder="物资大小">
+							</div>
+							<div class="input-group">
+								<span class="input-group-addon">剩余数量</span> <input type="text"
+									class="form-control" id="umtrStocknum" placeholder="剩余数量">
+							</div>
+							<div class="input-group">
+								<span class="input-group-addon">总数</span> <input type="text"
+									class="form-control" id="umtrTotalnum" placeholder="总数">
+							</div>
+							<div>
+								<span class="input-group-addon">类型</span> <select id="umtrType"
+									class="form-control">
+								</select>
+							</div>
+							<div>
+								<span class="input-group-addon">所属部门</span> <select
+									id="umtrDeptname" class="form-control">
+								</select>
+							</div>
+							<div class="input-group">
+								<span class="input-group-addon">重要程度</span> <input type="text"
+									class="form-control" id="umtrImportance" placeholder="重要程度">
+							</div>
+							<div class="input-group">
+								<span class="input-group-addon">备注</span> <input type="text"
+									class="form-control" id="umtrPostil" placeholder="备注">
+							</div>
+
+							</p>
+
+						</div>
+						<div class="modal-footer">
+							<a href="#" data-dismiss="modal" class="btn">关闭</a>
+							<button type="button" onclick="javascript:updatamaterial()"
+								class="btn btn-primary">保存</button>
+						</div>
+					</div>
+					<!-- 对话框结束 -->
+					<table class="table table-bordered table-striped">
+					</table>
+				</div>
+			</div>
+			<!-- 页面提示窗口 -->
+			<div class="modal fade bs-example-modal-sm in" id="SysWindow"
+				tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel"
+				aria-hidden="false" style="display: none;">
+				<div class="modal-dialog modal-sm">
+					<div class="modal-content">
+						<div class="modal-header">
+							<button class="close" data-dismiss="modal" type="button">
+								<span aria-hidden="true">×</span>
+							</button>
+							<h4 id="mySmallModalLabel" class="modal-title">系统提示</h4>
+						</div>
+						<div id="SysHint" class="modal-body"></div>
+					</div>
+				</div>
+			</div>
+			<!-- 页面提示结束 -->
+		</div>
+	</div>
+	<script src="../javascript/jquery.min.js"></script>
+	<script src="../javascript/bootstrap.min.js"></script>
+	<script src="../javascript/site.js"></script>
+	<script src="../js/common.js"></script>
+	<script src="../js/changePSW.js"></script>
+	<script src="../js/materiaManage.js""></script>
+</body>
+</html>

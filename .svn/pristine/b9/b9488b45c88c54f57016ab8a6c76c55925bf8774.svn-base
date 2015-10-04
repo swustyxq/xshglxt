@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<!--[if lt IE 7 ]><html lang="en" class="ie6 ielt7 ielt8 ielt9"><![endif]-->
+<!--[if IE 7 ]><html lang="en" class="ie7 ielt8 ielt9"><![endif]-->
+<!--[if IE 8 ]><html lang="en" class="ie8 ielt9"><![endif]-->
+<!--[if IE 9 ]><html lang="en" class="ie9"> <![endif]-->
+<!--[if (gt IE 9)|!(IE)]><!-->
+<html lang="en">
+<!--<![endif]-->
+<head>
+<meta charset="utf-8">
+<title>学生会物资管理系统</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link href="../css/bootstrap.min.css" rel="stylesheet">
+<link href="../css/bootstrap-responsive.min.css" rel="stylesheet">
+<link href="../css/site.css" rel="stylesheet">
+<script src="../javascript/jquery.min.js"></script>
+<!--[if lt IE 9]><script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+</head>
+<body>
+	<div class="container">
+		<div class="navbar">
+			<div class="navbar-inner">
+				<div class="container">
+					<a class="btn btn-navbar" data-toggle="collapse"
+						data-target=".nav-collapse"> <span class="icon-bar"></span> <span
+						class="icon-bar"></span> <span class="icon-bar"></span>
+					</a> <a class="brand" href="#" style="width:80%;text-align:center;">计科学院学生会物资管理系统</a>
+					<div class="nav-collapse">
+						<ul class="nav pull-right">
+							<li><a id="username">用户名</a></li>
+							<li><a href="javascript:logout()">注销</a></li>
+						</ul>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="span2">
+				<div class="well" style="padding: 20px 0;">
+					<ul id="navigation" class="nav nav-list">
+					</ul>
+				</div>
+			</div>
+			<div class="span10">
+				<div class="hero-unit">
+					<div align="center">
+						<h3>待处理物资申请列表</h3>
+					</div>
+					<!-- tab选项卡 -->
+					<div class="bs-example bs-example-tabs">
+						<ul id="myTab" class="nav nav-tabs" role="tablist">
+							<li class="active"><a data-toggle="tab" role="tab"
+								href="#curRecord">审批物资</a></li>
+							<li class=""><a data-toggle="tab" role="tab" href="#history">归还物资</a>
+							</li>
+						</ul>
+
+						<div id="myTabContent" class="tab-content">
+							<div id="curRecord" class="tab-pane fade active in">
+								<table id="recordList"
+									class="table table-bordered table-striped"
+									style="text-align: center;">
+									<thead>
+										<tr></tr>
+										<tr>
+											<td style="width: 12px;">#</td>
+											<td style="width: 40px;">申请人</td>
+											<td style="width: 20px;">所属部门</td>
+											<td style="width: 40px;">申请时间</td>
+											<td style="width: 30px;">操作</td>
+										</tr>
+									</thead>
+									<tbody id="neededCheckMtr">
+									</tbody>
+								</table>
+								<div style="text-align: center">
+									<div class="pagination pagination-center">
+										<nav>
+											<ul id="pageIndex" class="pagination">
+												<li><a href="#">&laquo;</a></li>
+												<li><a href="#">&raquo;</a></li>
+											</ul>
+										</nav>
+									</div>
+								</div>
+							</div>
+							<div id="history" class="tab-pane fade">
+										<table id="recordList"
+									class="table table-bordered table-striped"
+									style="text-align: center;">
+									<thead>
+										<tr></tr>
+										<tr>
+											<td style="width: 5%;">#</td>
+											<td style="width: 10%;">申请人</td>
+											<td style="width: 30%;">物资信息</td>
+											<td style="width: 25%;">申请时间</td>
+											<td style="width: 5%;">数量</td>
+											<td style="width: 15%;">归还情况</td>
+											<td style="width: 10%;">操作</td>
+										</tr>
+									</thead>
+									<tbody id="neededReturnMtr">
+									</tbody>
+								</table>
+								<div style="text-align: center">
+									<div class="pagination pagination-center">
+										<nav>
+											<ul id="returnIndex" class="pagination">
+												<li><a href="#">&laquo;</a></li>
+												<li><a href="#">&raquo;</a></li>
+											</ul>
+										</nav>
+									</div>
+								</div>
+							</div>
+
+						</div>
+						<!-- content结束 -->
+					</div>
+					<!-- tab结束 -->
+					
+				</div>
+				
+			</div>
+			
+			<!-- 物资模态框 -->
+			<div class="modal fade" id="detailModal" tabindex="-1" role="dialog"
+				aria-labelledby="myModalLabel" aria-hidden="true">
+				<div class="modal-dialog">
+					<div class="modal-content">
+						<div class="modal-header">
+							<button type="button" class="close" data-dismiss="modal">
+								<span aria-hidden="true">&times;</span><span class="sr-only"></span>
+							</button>
+							<h4 class="modal-title" id="myModalLabel">申请详情</h4>
+						</div>
+						<div class="modal-body"> 
+							<table id="applyerInfo" class="table table-bordered table-striped">
+								
+							</table>
+
+							<table class="table">
+								<thead>
+									<tr>
+										<th style="width:20px;">#</th>
+										<th style="width:120px;">物资信息</th>
+										<th style="width:40px;">数量</th>
+										<th style="width:60px;">申请理由</th>
+										<th style="width:60px;">操作</th>
+									</tr>
+								</thead>
+								<tbody id="detailMtr">
+								</tbody>
+								<tfoot>
+									<tr id="rejectObj" style="display:none;">
+									</tr>
+								</tfoot>
+							</table>
+						</div>
+						<div class="modal-footer">
+							<button type="button" class="btn btn-primary"
+								data-dismiss="modal" onclick="InitPage()">返回</button>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!-- 页面提示窗口 -->
+		<div class="modal fade bs-example-modal-sm in" id="SysWindow" tabindex="-1"
+			role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="false"  style="display: none;">
+			<div class="modal-dialog modal-sm">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button class="close" data-dismiss="modal" type="button">
+							<span aria-hidden="true">×</span> 
+						</button>
+						<h4 id="mySmallModalLabel" class="modal-title">系统提示</h4>
+					</div>
+					<div id="SysHint" class="modal-body"></div>
+				</div>
+			</div>
+		</div>
+		<!-- 页面提示结束 -->
+		</div>
+	</div>
+	<script src="../javascript/jquery.min.js"></script>
+	<script src="../javascript/bootstrap.min.js"></script>
+	<script src="../javascript/site.js"></script>
+	<script src="../js/common.js"></script>
+	<script src="../js/inspect.js"></script>
+	
+</body>
+</html>
